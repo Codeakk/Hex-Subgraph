@@ -1,0 +1,124 @@
+type ExampleEntity @entity {
+  id: ID!
+  count: BigInt!
+  owner: Bytes! # address
+  spender: Bytes! # address
+}
+
+
+type _StakeStart @entity {
+  id: ID!
+  stakerAddr:Bytes!
+  stakeId:BigInt!
+  data0:BigInt! 
+  timestamp:BigDecimal!
+  stakedHearts:BigDecimal!
+  stakeShares:BigDecimal!
+  stakedDays:BigDecimal!
+  isAutoStake:Boolean! 
+  stakeTShares:BigDecimal! 
+  startDay:BigDecimal!
+  endDay:BigDecimal! 
+  stakeEnd:_StakeEnd
+  stakeGoodAccounting:_StakeGoodAccounting
+  blockNumber: BigDecimal!
+}
+ 
+type _StakeEnd @entity {
+  id: ID!
+  stakerAddr:Bytes!
+  stakeId:BigInt!
+  data0:BigInt!
+  data1:BigInt! 
+  payout:BigDecimal!
+  stakedHearts:BigDecimal!
+  stakedShares:BigDecimal!
+  timestamp:BigDecimal!
+  penalty:BigDecimal!
+  servedDays: BigDecimal!
+  prevUnlocked: Boolean!  
+  daysLate:BigDecimal!
+  blockNumber: BigDecimal!
+}
+ 
+type _StakeGoodAccounting @entity{
+  id: ID!
+  stakerAddr:Bytes!
+  stakeId:BigInt!
+  data0:BigInt!
+  data1:BigInt! 
+  payout:BigDecimal!
+  stakedHearts:BigDecimal!
+  stakedShares:BigDecimal!
+  timestamp:BigDecimal!
+  penalty:BigDecimal!
+  blockNumber: BigDecimal!
+}
+
+type _ShareRateChange @entity{
+  id: ID! 
+  stakeId:BigInt!
+  data0:BigInt!
+  timestamp:BigDecimal! 
+  shareRate:BigDecimal!
+  tShareRateHearts:BigDecimal!
+  tShareRateHex:BigDecimal!
+  blockNumber: BigDecimal!
+}
+
+type _Claim @entity{
+  id:ID!
+  data0:BigInt!
+  data1:BigInt!
+  btcAddr: Bytes! 
+  claimToAddr: Bytes!
+  referrerAddr: Bytes! 
+}
+
+type _ClaimAssist @entity{
+  id: ID! 
+  data0:BigInt!
+  data1:BigInt!
+  data2:BigInt!
+  senderAddr:Bytes!
+}
+
+type _DailyDataUpdate @entity{
+  id:ID!
+  updaterAddr:Bytes!
+  data0:BigInt!
+  timestamp:BigDecimal! 
+  beginDay:Int! 
+  endDay:Int! 
+  isAutoUpdate:Boolean! 
+  payout: BigDecimal!
+  shares: BigDecimal!
+  sats: BigDecimal!
+  payoutPerTShare: BigDecimal!
+  blockNumber: BigDecimal!
+  lobbyEth:BigDecimal!
+  lobbyHexAvailable:BigDecimal!
+  lobbyHexPerEth:BigDecimal!
+}
+
+type _XfLobbyEnter @entity{
+  id:ID!
+  timestamp:BigDecimal!
+  memberAddr:Bytes!
+  entryId: BigInt!
+  rawAmount: BigDecimal!
+  referrerAddr:Bytes!
+  xfLobbyExit:_XfLobbyExit
+  data0:BigInt!
+  enterDay:BigDecimal!
+}
+
+type _XfLobbyExit @entity{
+  id:ID!
+  timestamp:BigDecimal!
+  memberAddr:Bytes!
+  entryId: BigInt!
+  xfAmount: BigDecimal!
+  referrerAddr:Bytes! 
+  data0:BigInt!
+}

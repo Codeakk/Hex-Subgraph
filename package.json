@@ -1,0 +1,21 @@
+{
+  "name": "Hex",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ Codeakk/Hex",
+    "create-local": "graph create --node http://localhost:8020/ Codeakk/Hex",
+    "remove-local": "graph remove --node http://localhost:8020/ Codeakk/Hex",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Codeakk/Hex"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.18.0",
+    "@graphprotocol/graph-ts": "0.18.0",
+    "@types/bn.js": "^4.11.6",
+    "@types/node": "^14.11.2"
+  },
+  "devDependencies": {
+    "ts-loader": "^8.0.4"
+  }
+}
