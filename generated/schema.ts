@@ -881,31 +881,55 @@ export class _DailyDataUpdate extends Entity {
     this.set("blockNumber", Value.fromBigDecimal(value));
   }
 
-  get lobbyEth(): BigDecimal {
+  get lobbyEth(): BigDecimal | null {
     let value = this.get("lobbyEth");
-    return value.toBigDecimal();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
   }
 
-  set lobbyEth(value: BigDecimal) {
-    this.set("lobbyEth", Value.fromBigDecimal(value));
+  set lobbyEth(value: BigDecimal | null) {
+    if (value === null) {
+      this.unset("lobbyEth");
+    } else {
+      this.set("lobbyEth", Value.fromBigDecimal(value as BigDecimal));
+    }
   }
 
-  get lobbyHexAvailable(): BigDecimal {
+  get lobbyHexAvailable(): BigDecimal | null {
     let value = this.get("lobbyHexAvailable");
-    return value.toBigDecimal();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
   }
 
-  set lobbyHexAvailable(value: BigDecimal) {
-    this.set("lobbyHexAvailable", Value.fromBigDecimal(value));
+  set lobbyHexAvailable(value: BigDecimal | null) {
+    if (value === null) {
+      this.unset("lobbyHexAvailable");
+    } else {
+      this.set("lobbyHexAvailable", Value.fromBigDecimal(value as BigDecimal));
+    }
   }
 
-  get lobbyHexPerEth(): BigDecimal {
+  get lobbyHexPerEth(): BigDecimal | null {
     let value = this.get("lobbyHexPerEth");
-    return value.toBigDecimal();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
   }
 
-  set lobbyHexPerEth(value: BigDecimal) {
-    this.set("lobbyHexPerEth", Value.fromBigDecimal(value));
+  set lobbyHexPerEth(value: BigDecimal | null) {
+    if (value === null) {
+      this.unset("lobbyHexPerEth");
+    } else {
+      this.set("lobbyHexPerEth", Value.fromBigDecimal(value as BigDecimal));
+    }
   }
 }
 

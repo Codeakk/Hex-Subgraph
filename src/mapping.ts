@@ -223,23 +223,25 @@ export function handleDailyDataUpdate(event: DailyDataUpdate): void {
   _dailyDataUpdate.payoutPerTShare = payoutPerTshare;
   let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
   _dailyDataUpdate.blockNumber =  blockNumberBigDecimal;
-
-  let lobbyEthEntered = hexContract.xfLobbyRange(_beginDay,_endDay);
-  let lobbyHexAvailable = hexContract.dailyData(_beginDay);
   
-  let _lobbyWeiEntered = lobbyEthEntered[0].toString();
-  let _lobbyWeiEnteredDecimal = BigDecimal.fromString(_lobbyWeiEntered);
-  let _lobbyEthEntered:BigDecimal = _lobbyWeiEnteredDecimal / BigDecimal.fromString("1000000000000000000");
-  _dailyDataUpdate.lobbyEth = _lobbyEthEntered;
-  let _lobbyHexAvailable = lobbyHexAvailable.value2.toString();
-  //log.debug('the data1: {}, dailyData: {}', [lobbyEthEntered[0].toString(), lobbyHexAvailable.value2.toString()]);
-
-  let _lobbyHexAvailableDecimal = ( BigDecimal.fromString(_lobbyHexAvailable) / BigDecimal.fromString("350") ) * BigDecimal.fromString("10000");
+  let tft = BigInt.fromI32(352);
+  if(_endDay < tft){
+    let lobbyEthEntered = hexContract.xfLobbyRange(_beginDay,_endDay);
+    let lobbyHexAvailable = hexContract.dailyData(_beginDay);
+    
+    let _lobbyWeiEntered = lobbyEthEntered[0].toString();
+    let _lobbyWeiEnteredDecimal = BigDecimal.fromString(_lobbyWeiEntered);
+    let _lobbyEthEntered:BigDecimal = _lobbyWeiEnteredDecimal / BigDecimal.fromString("1000000000000000000");
+    _dailyDataUpdate.lobbyEth = _lobbyEthEntered;
+    let _lobbyHexAvailable = lobbyHexAvailable.value2.toString();
+    //log.debug('the data1: {}, dailyData: {}', [lobbyEthEntered[0].toString(), lobbyHexAvailable.value2.toString()]);
   
-  _dailyDataUpdate.lobbyHexAvailable = _lobbyHexAvailableDecimal;
-
-  _dailyDataUpdate.lobbyHexPerEth = (_lobbyHexAvailableDecimal / _lobbyEthEntered) / BigDecimal.fromString("100000000");
-
+    let _lobbyHexAvailableDecimal = ( BigDecimal.fromString(_lobbyHexAvailable) / BigDecimal.fromString("350") ) * BigDecimal.fromString("10000");
+    
+    _dailyDataUpdate.lobbyHexAvailable = _lobbyHexAvailableDecimal;
+  
+    _dailyDataUpdate.lobbyHexPerEth = (_lobbyHexAvailableDecimal / _lobbyEthEntered) / BigDecimal.fromString("100000000");
+  }
   _dailyDataUpdate.save();
 }
 

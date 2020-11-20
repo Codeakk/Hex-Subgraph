@@ -96,9 +96,9 @@ type _DailyDataUpdate @entity{
   sats: BigDecimal!
   payoutPerTShare: BigDecimal!
   blockNumber: BigDecimal!
-  lobbyEth:BigDecimal!
-  lobbyHexAvailable:BigDecimal!
-  lobbyHexPerEth:BigDecimal!
+  lobbyEth:BigDecimal
+  lobbyHexAvailable:BigDecimal
+  lobbyHexPerEth:BigDecimal
 }
 
 type _XfLobbyEnter @entity{
