@@ -482,7 +482,7 @@ export class DailyDataRangeData {
         //log.debug('the payout: {}, {}', [payoutSlice.toString(), this.payout.toString()]); 
 
         if(data0BinaryStr.length >= 72){  
-            let sharesSlice = data0BinaryStr.slice(-136,-72);   
+            let sharesSlice = data0BinaryStr.slice(-143,-72);   
             this.shares = binaryStrToBigDecimal(sharesSlice);  
            // log.debug('the shares: {}, {}', [sharesSlice.toString(), this.shares.toString()]); 
         } 
@@ -491,8 +491,8 @@ export class DailyDataRangeData {
             this.shares = v1;
         }
 
-        if(data0BinaryStr.length >= 137){  
-            let satsSlice = data0BinaryStr.slice(-data0BinaryStr.length,-137);  
+        if(data0BinaryStr.length >= 144){  
+            let satsSlice = data0BinaryStr.slice(-data0BinaryStr.length,-144);  
             this.sats = binaryStrToBigDecimal(satsSlice);  
         }
         else {
