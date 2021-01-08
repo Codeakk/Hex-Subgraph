@@ -1128,3 +1128,128 @@ export class _XfLobbyExit extends Entity {
     this.set("data0", Value.fromBigInt(value));
   }
 }
+
+export class _TokenHolder extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save _TokenHolder entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save _TokenHolder entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("_TokenHolder", id.toString(), this);
+  }
+
+  static load(id: string): _TokenHolder | null {
+    return store.get("_TokenHolder", id) as _TokenHolder | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get holderAddress(): Bytes {
+    let value = this.get("holderAddress");
+    return value.toBytes();
+  }
+
+  set holderAddress(value: Bytes) {
+    this.set("holderAddress", Value.fromBytes(value));
+  }
+
+  get totalSent(): BigDecimal {
+    let value = this.get("totalSent");
+    return value.toBigDecimal();
+  }
+
+  set totalSent(value: BigDecimal) {
+    this.set("totalSent", Value.fromBigDecimal(value));
+  }
+
+  get totalReceived(): BigDecimal {
+    let value = this.get("totalReceived");
+    return value.toBigDecimal();
+  }
+
+  set totalReceived(value: BigDecimal) {
+    this.set("totalReceived", Value.fromBigDecimal(value));
+  }
+
+  get tokenBalance(): BigDecimal {
+    let value = this.get("tokenBalance");
+    return value.toBigDecimal();
+  }
+
+  set tokenBalance(value: BigDecimal) {
+    this.set("tokenBalance", Value.fromBigDecimal(value));
+  }
+}
+
+export class _Transfer extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save _Transfer entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save _Transfer entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("_Transfer", id.toString(), this);
+  }
+
+  static load(id: string): _Transfer | null {
+    return store.get("_Transfer", id) as _Transfer | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get to(): Bytes {
+    let value = this.get("to");
+    return value.toBytes();
+  }
+
+  set to(value: Bytes) {
+    this.set("to", Value.fromBytes(value));
+  }
+
+  get value(): BigInt {
+    let value = this.get("value");
+    return value.toBigInt();
+  }
+
+  set value(value: BigInt) {
+    this.set("value", Value.fromBigInt(value));
+  }
+}

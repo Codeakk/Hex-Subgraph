@@ -13,6 +13,7 @@ import {
   StakeStart,
   XfLobbyEnter,
   XfLobbyExit,
+  Transfer,
 } from "../generated/Contract/Contract"
 import { _StakeEnd
         ,_StakeStart 
@@ -23,8 +24,9 @@ import { _StakeEnd
         ,_DailyDataUpdate
         ,_XfLobbyEnter
         ,_XfLobbyExit
+        ,_TokenHolder
+        ,_Transfer
 } from '../generated/schema'
-
 import { StakeEndData
         ,StakeStartData
         ,StakeGoodAccountingData
@@ -36,7 +38,7 @@ import { StakeEndData
         ,XfLobbyEnterData
         ,XfLobbyExitData
 } from '../src/eventDataClasses'
-
+ 
 function convertDecimalToBinary(number: BigInt): string {
   // log.debug('Binary Variable', []);
    var binary = ""; 
@@ -441,20 +443,6 @@ export function handleStakeGoodAccounting(event: StakeGoodAccounting): void {
    
 }
 
-// export function handleTransfer(event: Transfer): void {
-//   let id = event.params.from.toHexString()
-
-//   let _transfer = _Transfer.load(event.params.from.toHexString());
-
-//   if (_transfer == null) {
-//     _transfer = new _Transfer(id);
-//   }
-
-//   _transfer.from = event.params.from; 
-//   _transfer.to = event.params.to; 
-//   _transfer.value = event.params.value;
-// }
-
 export function handleXfLobbyEnter(event: XfLobbyEnter): void {
 
   let id = event.params.entryId.toHexString() + event.params.memberAddr.toHexString();
@@ -519,5 +507,73 @@ export function handleXfLobbyExit(event: XfLobbyExit): void {
 
   _xfLobbyEnter.save();
   _xfLobbyExit.save();
+  
+}
 
+export function handleTransfer(event: Transfer): void { 
+  let id = event.transaction.hash.toHexString();
+
+  let _transfer = _Transfer.load(id);
+
+  if (_transfer == null) {
+    _transfer = new _Transfer(id);
+  }
+
+  _transfer.from = event.params.from; 
+  _transfer.to = event.params.to; 
+  _transfer.value = event.params.value;
+  _transfer.save();
+
+  ///////TokenHolder to Update///////
+  updateTokenHolder(event.params.to, event.params.value.toString(), '+');
+
+  ///////TokenHolder from Update/////// 
+  updateTokenHolder(event.params.from, event.params.value.toString(), '-');
+
+}
+
+function updateTokenHolder(address:Address, value: string, operator:string): void {
+  let Id = address.toHexString();
+
+  let _tokenHolder = _TokenHolder.load(Id);
+  let currentTokenBalance = BigDecimal.fromString("0"); 
+  let currentTotalSent = BigDecimal.fromString("0"); 
+  let currentTotalReceived = BigDecimal.fromString("0"); 
+
+  if (_tokenHolder == null) {
+    _tokenHolder = new _TokenHolder(Id);
+    _tokenHolder.totalSent = currentTotalSent;
+    _tokenHolder.totalReceived = currentTotalReceived;
+  }
+  else{
+    currentTokenBalance = _tokenHolder.tokenBalance;
+    if(operator == '+'){
+      currentTotalReceived = _tokenHolder.totalReceived; 
+    }
+    if(operator == '-'){
+      currentTotalSent = _tokenHolder.totalSent; 
+    }
+  }
+ 
+  let valueBigDecimal:BigDecimal = BigDecimal.fromString(value);
+  let newTokenBalance:BigDecimal = BigDecimal.fromString("0"); 
+  let newTotalSent:BigDecimal = BigDecimal.fromString("0"); 
+  let newTotalReceived:BigDecimal = BigDecimal.fromString("0"); 
+
+  if(operator == '+'){
+    newTokenBalance = currentTokenBalance + valueBigDecimal; 
+    newTotalReceived = currentTotalReceived + valueBigDecimal; 
+    _tokenHolder.totalReceived = newTotalReceived;
+  }
+  if(operator == '-'){
+    newTokenBalance = currentTokenBalance - valueBigDecimal; 
+    newTotalSent = currentTotalSent + valueBigDecimal;
+    _tokenHolder.totalSent = newTotalSent;
+  }
+
+  _tokenHolder.holderAddress = address;
+  _tokenHolder.tokenBalance = newTokenBalance;
+  
+
+  _tokenHolder.save(); 
 }

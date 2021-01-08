@@ -24,6 +24,7 @@ dataSources:
         - StakeStart
         - XfLobbyEnter
         - XfLobbyExit
+        - Transfer
       abis:
         - name: Contract
           file: Contract\abis\Contract.json
@@ -48,4 +49,6 @@ dataSources:
           handler: handleXfLobbyEnter
         - event: XfLobbyExit(uint256,indexed address,indexed uint256,indexed address)
           handler: handleXfLobbyExit
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
       file: Contract\Contract.wasm

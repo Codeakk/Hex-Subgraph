@@ -5,7 +5,6 @@ type ExampleEntity @entity {
   spender: Bytes! # address
 }
 
-
 type _StakeStart @entity {
   id: ID!
   stakerAddr:Bytes!
@@ -121,4 +120,19 @@ type _XfLobbyExit @entity{
   xfAmount: BigDecimal!
   referrerAddr:Bytes! 
   data0:BigInt!
+}
+
+type _TokenHolder @entity {
+  id: ID!
+  holderAddress: Bytes!
+  totalSent:BigDecimal!
+  totalReceived:BigDecimal!
+  tokenBalance: BigDecimal!
+} 
+
+type _Transfer @entity{
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  value: BigInt!
 }
