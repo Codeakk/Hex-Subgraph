@@ -122,12 +122,23 @@ type _XfLobbyExit @entity{
   data0:BigInt!
 }
 
+type _MetaCounts @entity{
+    id:ID!
+    count:BigInt!
+}
+
 type _TokenHolder @entity {
   id: ID!
+  numeralIndex:BigInt!
   holderAddress: Bytes!
   totalSent:BigDecimal!
   totalReceived:BigDecimal!
   tokenBalance: BigDecimal!
+  createdTimeStamp:BigInt!
+  createdBlocknumber:BigInt!
+  createdHexDay:BigInt!
+  lastModifiedHexDay:BigInt!
+  lastModifiedTimeStamp:BigInt! 
 } 
 
 type _Transfer @entity{
@@ -135,4 +146,6 @@ type _Transfer @entity{
   from: Bytes!
   to: Bytes!
   value: BigInt!
+  hexDay:BigInt!
+  timestamp:BigInt!
 }

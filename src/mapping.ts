@@ -26,6 +26,7 @@ import { _StakeEnd
         ,_XfLobbyExit
         ,_TokenHolder
         ,_Transfer
+        ,_MetaCounts
 } from '../generated/schema'
 import { StakeEndData
         ,StakeStartData
@@ -519,31 +520,51 @@ export function handleTransfer(event: Transfer): void {
     _transfer = new _Transfer(id);
   }
 
+  let hexContract = Contract.bind(Address.fromString("0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"));
+  let currentDay = hexContract.currentDay();
+
   _transfer.from = event.params.from; 
   _transfer.to = event.params.to; 
   _transfer.value = event.params.value;
+  _transfer.hexDay = currentDay;
+  _transfer.timestamp = event.block.timestamp;
   _transfer.save();
+ 
+  ///////TokenHolder from Update/////// 
+  updateTokenHolder(event.params.from, event.params.value.toString(), '-', event);
 
   ///////TokenHolder to Update///////
-  updateTokenHolder(event.params.to, event.params.value.toString(), '+');
-
-  ///////TokenHolder from Update/////// 
-  updateTokenHolder(event.params.from, event.params.value.toString(), '-');
+  updateTokenHolder(event.params.to, event.params.value.toString(), '+', event);
 
 }
 
-function updateTokenHolder(address:Address, value: string, operator:string): void {
+function updateTokenHolder(address:Address, value: string, operator:string, event:Transfer): void {
   let Id = address.toHexString();
 
   let _tokenHolder = _TokenHolder.load(Id);
   let currentTokenBalance = BigDecimal.fromString("0"); 
   let currentTotalSent = BigDecimal.fromString("0"); 
   let currentTotalReceived = BigDecimal.fromString("0"); 
-
+  let hexContract = Contract.bind(Address.fromString("0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"));
+  let currentDay = hexContract.currentDay();
+  
   if (_tokenHolder == null) {
     _tokenHolder = new _TokenHolder(Id);
     _tokenHolder.totalSent = currentTotalSent;
     _tokenHolder.totalReceived = currentTotalReceived;
+    _tokenHolder.createdTimeStamp = event.block.timestamp;
+    _tokenHolder.createdBlocknumber = event.block.number;
+    _tokenHolder.createdHexDay = currentDay;
+    let _metaCount = _MetaCounts.load("TokenHolder");
+    if (_metaCount == null) {
+      _metaCount = new _MetaCounts("TokenHolder");
+      let zero = BigInt.fromI32(0);
+      _metaCount.count = zero;
+    }
+    let one = BigInt.fromI32(1);
+    _metaCount.count = _metaCount.count.plus(one);
+    _metaCount.save();
+    _tokenHolder.numeralIndex = _metaCount.count;
   }
   else{
     currentTokenBalance = _tokenHolder.tokenBalance;
@@ -554,7 +575,9 @@ function updateTokenHolder(address:Address, value: string, operator:string): voi
       currentTotalSent = _tokenHolder.totalSent; 
     }
   }
- 
+
+
+
   let valueBigDecimal:BigDecimal = BigDecimal.fromString(value);
   let newTokenBalance:BigDecimal = BigDecimal.fromString("0"); 
   let newTotalSent:BigDecimal = BigDecimal.fromString("0"); 
@@ -571,9 +594,10 @@ function updateTokenHolder(address:Address, value: string, operator:string): voi
     _tokenHolder.totalSent = newTotalSent;
   }
 
+  _tokenHolder.lastModifiedHexDay = currentDay;
+  _tokenHolder.lastModifiedTimeStamp = event.block.timestamp;
   _tokenHolder.holderAddress = address;
   _tokenHolder.tokenBalance = newTokenBalance;
   
-
   _tokenHolder.save(); 
 }

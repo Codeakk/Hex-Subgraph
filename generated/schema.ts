@@ -1129,6 +1129,46 @@ export class _XfLobbyExit extends Entity {
   }
 }
 
+export class _MetaCounts extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save _MetaCounts entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save _MetaCounts entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("_MetaCounts", id.toString(), this);
+  }
+
+  static load(id: string): _MetaCounts | null {
+    return store.get("_MetaCounts", id) as _MetaCounts | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get count(): BigInt {
+    let value = this.get("count");
+    return value.toBigInt();
+  }
+
+  set count(value: BigInt) {
+    this.set("count", Value.fromBigInt(value));
+  }
+}
+
 export class _TokenHolder extends Entity {
   constructor(id: string) {
     super();
@@ -1157,6 +1197,15 @@ export class _TokenHolder extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get numeralIndex(): BigInt {
+    let value = this.get("numeralIndex");
+    return value.toBigInt();
+  }
+
+  set numeralIndex(value: BigInt) {
+    this.set("numeralIndex", Value.fromBigInt(value));
   }
 
   get holderAddress(): Bytes {
@@ -1193,6 +1242,51 @@ export class _TokenHolder extends Entity {
 
   set tokenBalance(value: BigDecimal) {
     this.set("tokenBalance", Value.fromBigDecimal(value));
+  }
+
+  get createdTimeStamp(): BigInt {
+    let value = this.get("createdTimeStamp");
+    return value.toBigInt();
+  }
+
+  set createdTimeStamp(value: BigInt) {
+    this.set("createdTimeStamp", Value.fromBigInt(value));
+  }
+
+  get createdBlocknumber(): BigInt {
+    let value = this.get("createdBlocknumber");
+    return value.toBigInt();
+  }
+
+  set createdBlocknumber(value: BigInt) {
+    this.set("createdBlocknumber", Value.fromBigInt(value));
+  }
+
+  get createdHexDay(): BigInt {
+    let value = this.get("createdHexDay");
+    return value.toBigInt();
+  }
+
+  set createdHexDay(value: BigInt) {
+    this.set("createdHexDay", Value.fromBigInt(value));
+  }
+
+  get lastModifiedHexDay(): BigInt {
+    let value = this.get("lastModifiedHexDay");
+    return value.toBigInt();
+  }
+
+  set lastModifiedHexDay(value: BigInt) {
+    this.set("lastModifiedHexDay", Value.fromBigInt(value));
+  }
+
+  get lastModifiedTimeStamp(): BigInt {
+    let value = this.get("lastModifiedTimeStamp");
+    return value.toBigInt();
+  }
+
+  set lastModifiedTimeStamp(value: BigInt) {
+    this.set("lastModifiedTimeStamp", Value.fromBigInt(value));
   }
 }
 
@@ -1251,5 +1345,23 @@ export class _Transfer extends Entity {
 
   set value(value: BigInt) {
     this.set("value", Value.fromBigInt(value));
+  }
+
+  get hexDay(): BigInt {
+    let value = this.get("hexDay");
+    return value.toBigInt();
+  }
+
+  set hexDay(value: BigInt) {
+    this.set("hexDay", Value.fromBigInt(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
   }
 }
