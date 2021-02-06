@@ -381,6 +381,15 @@ export class _StakeEnd extends Entity {
     this.set("daysLate", Value.fromBigDecimal(value));
   }
 
+  get daysEarly(): BigDecimal {
+    let value = this.get("daysEarly");
+    return value.toBigDecimal();
+  }
+
+  set daysEarly(value: BigDecimal) {
+    this.set("daysEarly", Value.fromBigDecimal(value));
+  }
+
   get blockNumber(): BigDecimal {
     let value = this.get("blockNumber");
     return value.toBigDecimal();
@@ -1363,5 +1372,23 @@ export class _Transfer extends Entity {
 
   set timestamp(value: BigInt) {
     this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
+  }
+
+  get numeralIndex(): BigInt {
+    let value = this.get("numeralIndex");
+    return value.toBigInt();
+  }
+
+  set numeralIndex(value: BigInt) {
+    this.set("numeralIndex", Value.fromBigInt(value));
   }
 }

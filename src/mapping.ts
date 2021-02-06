@@ -382,11 +382,17 @@ export function handleStakeEnd(event: StakeEnd): void {
   let _stakeStart = _StakeStart.load(startStakeId);
   let dueDay:BigDecimal = _stakeStart.stakedDays + _stakeStart.startDay;
   let daysLate:BigDecimal = BigDecimal.fromString("0");
+  let daysEarly:BigDecimal = BigDecimal.fromString("0");
 
   if(_currentDay > dueDay){
     daysLate = _currentDay - dueDay;
   }
+  if(_currentDay < dueDay){
+    daysEarly = dueDay - _currentDay;
+  }
   _stakeEnd.daysLate = daysLate;
+  _stakeEnd.daysEarly = daysEarly;
+
   _stakeStart.stakeEnd = event.params.stakeId.toHexString();
   
   let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
@@ -512,7 +518,17 @@ export function handleXfLobbyExit(event: XfLobbyExit): void {
 }
 
 export function handleTransfer(event: Transfer): void { 
-  let id = event.transaction.hash.toHexString();
+  let _metaCount = _MetaCounts.load("Transfer");
+  if (_metaCount == null) {
+    _metaCount = new _MetaCounts("Transfer");
+    let zero = BigInt.fromI32(0);
+    _metaCount.count = zero;
+  }
+  let one = BigInt.fromI32(1);
+  _metaCount.count = _metaCount.count.plus(one);
+  _metaCount.save();
+
+  let id = _metaCount.count.toString() + event.transaction.hash.toHexString();
 
   let _transfer = _Transfer.load(id);
 
@@ -523,6 +539,8 @@ export function handleTransfer(event: Transfer): void {
   let hexContract = Contract.bind(Address.fromString("0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"));
   let currentDay = hexContract.currentDay();
 
+  _transfer.numeralIndex = _metaCount.count;
+  _transfer.transactionHash = event.transaction.hash;
   _transfer.from = event.params.from; 
   _transfer.to = event.params.to; 
   _transfer.value = event.params.value;

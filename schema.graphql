@@ -37,6 +37,7 @@ type _StakeEnd @entity {
   servedDays: BigDecimal!
   prevUnlocked: Boolean!  
   daysLate:BigDecimal!
+  daysEarly:BigDecimal!
   blockNumber: BigDecimal!
 }
  
@@ -148,4 +149,6 @@ type _Transfer @entity{
   value: BigInt!
   hexDay:BigInt!
   timestamp:BigInt!
+  transactionHash:Bytes!
+  numeralIndex:BigInt!
 }
