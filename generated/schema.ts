@@ -1391,4 +1391,48 @@ export class _Transfer extends Entity {
   set numeralIndex(value: BigInt) {
     this.set("numeralIndex", Value.fromBigInt(value));
   }
+
+  get gasUsed(): BigInt {
+    let value = this.get("gasUsed");
+    return value.toBigInt();
+  }
+
+  set gasUsed(value: BigInt) {
+    this.set("gasUsed", Value.fromBigInt(value));
+  }
+
+  get gasPrice(): BigInt {
+    let value = this.get("gasPrice");
+    return value.toBigInt();
+  }
+
+  set gasPrice(value: BigInt) {
+    this.set("gasPrice", Value.fromBigInt(value));
+  }
+
+  get input(): string {
+    let value = this.get("input");
+    return value.toString();
+  }
+
+  set input(value: string) {
+    this.set("input", Value.fromString(value));
+  }
+
+  get methodId(): string | null {
+    let value = this.get("methodId");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set methodId(value: string | null) {
+    if (value === null) {
+      this.unset("methodId");
+    } else {
+      this.set("methodId", Value.fromString(value as string));
+    }
+  }
 }

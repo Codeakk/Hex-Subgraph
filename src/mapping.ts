@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, JSONValue, Value } from "@graphprotocol/graph-ts"
+import { Address, BigDecimal, BigInt, Bytes, JSONValue, Value } from "@graphprotocol/graph-ts"
 import { ExampleEntity} from "../generated/schema"
 import { log } from '@graphprotocol/graph-ts'
 import {
@@ -61,7 +61,44 @@ function convertDecimalToBinary(number: BigInt): string {
    
    return binary;
 }
-  
+
+function parseInput(input: Bytes): string {
+  //0x96f62b9d - btcAddressClaim
+  //0xce7d1f77 - xfLobbyEnter
+  //0xcbb151d3 - xfLobbyExit
+  //0x343009a2 - stakeEnd
+  //0x52a438b8 - stakeStart
+  //0x65cf71b2 - stakeGoodAccounting
+
+  var result = ""; 
+  let temp = input.toHexString();
+
+  let tempSlice = temp.slice(0,10);    
+   
+  //log.debug('The tempSlice: {}, the temp: {}', [tempSlice, temp]);
+
+  if(tempSlice == "0x96f62b9d"){
+    result = "btcAddressClaim"
+  }
+  if(tempSlice == "0xce7d1f77"){
+    result = "xfLobbyEnter"
+  }
+  if(tempSlice == "0xcbb151d3"){
+    result = "xfLobbyExit"
+  } 
+  if(tempSlice == "0x343009a2"){
+    result = "stakeEnd"
+  } 
+  if(tempSlice == "0x52a438b8"){
+    result = "stakeStart"
+  } 
+  if(tempSlice == "0x65cf71b2"){
+    result = "stakeGoodAccounting"
+  }
+
+  return result;
+}
+ 
 export function handleApproval(event: Approval): void {
   // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
@@ -541,6 +578,17 @@ export function handleTransfer(event: Transfer): void {
 
   _transfer.numeralIndex = _metaCount.count;
   _transfer.transactionHash = event.transaction.hash;
+  _transfer.gasUsed = event.transaction.gasUsed;
+  _transfer.gasPrice = event.transaction.gasPrice;
+
+  _transfer.input = event.transaction.input.toHexString();
+  let methodId = parseInput(event.transaction.input);
+  if(methodId != ""){
+    _transfer.methodId =  methodId;
+  }
+  else{
+    _transfer.methodId =  null; 
+  }
   _transfer.from = event.params.from; 
   _transfer.to = event.params.to; 
   _transfer.value = event.params.value;
