@@ -413,19 +413,24 @@ export function handleStakeEnd(event: StakeEnd): void {
   
   let currentDay = hexContract.currentDay();
   let _currentDay:BigDecimal = BigDecimal.fromString(currentDay.toString());
-  
+  let one:BigDecimal = BigDecimal.fromString("1");
+  _currentDay = _currentDay + one;
   let startStakeId = event.params.stakeId.toHexString();
 
   let _stakeStart = _StakeStart.load(startStakeId);
   let dueDay:BigDecimal = _stakeStart.stakedDays + _stakeStart.startDay;
   let daysLate:BigDecimal = BigDecimal.fromString("0");
   let daysEarly:BigDecimal = BigDecimal.fromString("0");
-
+  
   if(_currentDay > dueDay){
     daysLate = _currentDay - dueDay;
   }
   if(_currentDay < dueDay){
     daysEarly = dueDay - _currentDay;
+  }
+  if(_currentDay == dueDay){
+    daysLate = BigDecimal.fromString("0");
+    daysEarly = BigDecimal.fromString("0");
   }
   _stakeEnd.daysLate = daysLate;
   _stakeEnd.daysEarly = daysEarly;
@@ -597,14 +602,14 @@ export function handleTransfer(event: Transfer): void {
   _transfer.save();
  
   ///////TokenHolder from Update/////// 
-  updateTokenHolder(event.params.from, event.params.value.toString(), '-', event);
+  updateTokenHolder(event.params.from, event.params.value.toString(), '-', event.block.timestamp, event.block.number);
 
   ///////TokenHolder to Update///////
-  updateTokenHolder(event.params.to, event.params.value.toString(), '+', event);
+  updateTokenHolder(event.params.to, event.params.value.toString(), '+', event.block.timestamp, event.block.number);
 
 }
 
-function updateTokenHolder(address:Address, value: string, operator:string, event:Transfer): void {
+function updateTokenHolder(address:Address, value: string, operator:string, eventTimestamp:BigInt, eventBlockNumber:BigInt): void {
   let Id = address.toHexString();
 
   let _tokenHolder = _TokenHolder.load(Id);
@@ -618,8 +623,8 @@ function updateTokenHolder(address:Address, value: string, operator:string, even
     _tokenHolder = new _TokenHolder(Id);
     _tokenHolder.totalSent = currentTotalSent;
     _tokenHolder.totalReceived = currentTotalReceived;
-    _tokenHolder.createdTimeStamp = event.block.timestamp;
-    _tokenHolder.createdBlocknumber = event.block.number;
+    _tokenHolder.createdTimeStamp = eventTimestamp;
+    _tokenHolder.createdBlocknumber = eventBlockNumber;
     _tokenHolder.createdHexDay = currentDay;
     let _metaCount = _MetaCounts.load("TokenHolder");
     if (_metaCount == null) {
@@ -659,9 +664,8 @@ function updateTokenHolder(address:Address, value: string, operator:string, even
     newTotalSent = currentTotalSent + valueBigDecimal;
     _tokenHolder.totalSent = newTotalSent;
   }
-
   _tokenHolder.lastModifiedHexDay = currentDay;
-  _tokenHolder.lastModifiedTimeStamp = event.block.timestamp;
+  _tokenHolder.lastModifiedTimeStamp = eventTimestamp;
   _tokenHolder.holderAddress = address;
   _tokenHolder.tokenBalance = newTokenBalance;
   
