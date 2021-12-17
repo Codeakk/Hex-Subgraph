@@ -1,10 +1,3 @@
-type ExampleEntity @entity {
-  id: ID!
-  count: BigInt!
-  owner: Bytes! # address
-  spender: Bytes! # address
-}
-
 type _StakeStart @entity {
   id: ID!
   stakerAddr:Bytes!
@@ -21,6 +14,7 @@ type _StakeStart @entity {
   stakeEnd:_StakeEnd
   stakeGoodAccounting:_StakeGoodAccounting
   blockNumber: BigDecimal!
+  transactionHash:Bytes!
 }
  
 type _StakeEnd @entity {
@@ -39,6 +33,7 @@ type _StakeEnd @entity {
   daysLate:BigDecimal!
   daysEarly:BigDecimal!
   blockNumber: BigDecimal!
+  transactionHash:Bytes!
 }
  
 type _StakeGoodAccounting @entity{
@@ -53,6 +48,7 @@ type _StakeGoodAccounting @entity{
   timestamp:BigDecimal!
   penalty:BigDecimal!
   blockNumber: BigDecimal!
+  transactionHash:Bytes!
 }
 
 type _ShareRateChange @entity{
@@ -64,6 +60,7 @@ type _ShareRateChange @entity{
   tShareRateHearts:BigDecimal!
   tShareRateHex:BigDecimal!
   blockNumber: BigDecimal!
+  transactionHash:Bytes!
 }
 
 type _Claim @entity{
@@ -99,6 +96,7 @@ type _DailyDataUpdate @entity{
   lobbyEth:BigDecimal
   lobbyHexAvailable:BigDecimal
   lobbyHexPerEth:BigDecimal
+  transactionHash:Bytes!
 }
 
 type _XfLobbyEnter @entity{
@@ -111,6 +109,7 @@ type _XfLobbyEnter @entity{
   xfLobbyExit:_XfLobbyExit
   data0:BigInt!
   enterDay:BigDecimal!
+  transactionHash:Bytes!
 }
 
 type _XfLobbyExit @entity{
@@ -121,6 +120,7 @@ type _XfLobbyExit @entity{
   xfAmount: BigDecimal!
   referrerAddr:Bytes! 
   data0:BigInt!
+  transactionHash:Bytes!
 }
 
 type _MetaCounts @entity{
@@ -156,3 +156,22 @@ type _Transfer @entity{
   input:String! 
   methodId:String
 }
+
+type _GlobalInfo @entity {
+  id: ID!
+  allocatedSupply:BigInt!
+  totalSupply:BigInt!
+  lockedHeartsTotal:BigInt!
+  nextStakeSharesTotal: BigInt!
+  shareRate:BigInt!
+  stakePenaltyTotal:BigInt!
+  stakeSharesTotal: BigInt!
+  latestStakeId: BigInt! 
+  totalHeartsinCirculation:BigInt!
+  totalMintedHearts:BigInt!
+  timestamp:BigInt!
+  blocknumber:BigInt!
+  hexDay:BigInt! 
+  globalInfoCount: BigDecimal!
+  transactionHash:Bytes!
+} 

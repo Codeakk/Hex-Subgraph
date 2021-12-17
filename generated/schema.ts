@@ -12,64 +12,6 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class ExampleEntity extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save ExampleEntity entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save ExampleEntity entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("ExampleEntity", id.toString(), this);
-  }
-
-  static load(id: string): ExampleEntity | null {
-    return store.get("ExampleEntity", id) as ExampleEntity | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get count(): BigInt {
-    let value = this.get("count");
-    return value.toBigInt();
-  }
-
-  set count(value: BigInt) {
-    this.set("count", Value.fromBigInt(value));
-  }
-
-  get owner(): Bytes {
-    let value = this.get("owner");
-    return value.toBytes();
-  }
-
-  set owner(value: Bytes) {
-    this.set("owner", Value.fromBytes(value));
-  }
-
-  get spender(): Bytes {
-    let value = this.get("spender");
-    return value.toBytes();
-  }
-
-  set spender(value: Bytes) {
-    this.set("spender", Value.fromBytes(value));
-  }
-}
-
 export class _StakeStart extends Entity {
   constructor(id: string) {
     super();
@@ -201,7 +143,7 @@ export class _StakeStart extends Entity {
 
   get stakeEnd(): string | null {
     let value = this.get("stakeEnd");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -218,7 +160,7 @@ export class _StakeStart extends Entity {
 
   get stakeGoodAccounting(): string | null {
     let value = this.get("stakeGoodAccounting");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -240,6 +182,15 @@ export class _StakeStart extends Entity {
 
   set blockNumber(value: BigDecimal) {
     this.set("blockNumber", Value.fromBigDecimal(value));
+  }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
   }
 }
 
@@ -398,6 +349,15 @@ export class _StakeEnd extends Entity {
   set blockNumber(value: BigDecimal) {
     this.set("blockNumber", Value.fromBigDecimal(value));
   }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
+  }
 }
 
 export class _StakeGoodAccounting extends Entity {
@@ -522,6 +482,15 @@ export class _StakeGoodAccounting extends Entity {
   set blockNumber(value: BigDecimal) {
     this.set("blockNumber", Value.fromBigDecimal(value));
   }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
+  }
 }
 
 export class _ShareRateChange extends Entity {
@@ -615,6 +584,15 @@ export class _ShareRateChange extends Entity {
 
   set blockNumber(value: BigDecimal) {
     this.set("blockNumber", Value.fromBigDecimal(value));
+  }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
   }
 }
 
@@ -892,7 +870,7 @@ export class _DailyDataUpdate extends Entity {
 
   get lobbyEth(): BigDecimal | null {
     let value = this.get("lobbyEth");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigDecimal();
@@ -909,7 +887,7 @@ export class _DailyDataUpdate extends Entity {
 
   get lobbyHexAvailable(): BigDecimal | null {
     let value = this.get("lobbyHexAvailable");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigDecimal();
@@ -926,7 +904,7 @@ export class _DailyDataUpdate extends Entity {
 
   get lobbyHexPerEth(): BigDecimal | null {
     let value = this.get("lobbyHexPerEth");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigDecimal();
@@ -939,6 +917,15 @@ export class _DailyDataUpdate extends Entity {
     } else {
       this.set("lobbyHexPerEth", Value.fromBigDecimal(value as BigDecimal));
     }
+  }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
   }
 }
 
@@ -1019,7 +1006,7 @@ export class _XfLobbyEnter extends Entity {
 
   get xfLobbyExit(): string | null {
     let value = this.get("xfLobbyExit");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1050,6 +1037,15 @@ export class _XfLobbyEnter extends Entity {
 
   set enterDay(value: BigDecimal) {
     this.set("enterDay", Value.fromBigDecimal(value));
+  }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
   }
 }
 
@@ -1135,6 +1131,15 @@ export class _XfLobbyExit extends Entity {
 
   set data0(value: BigInt) {
     this.set("data0", Value.fromBigInt(value));
+  }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
   }
 }
 
@@ -1421,7 +1426,7 @@ export class _Transfer extends Entity {
 
   get methodId(): string | null {
     let value = this.get("methodId");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1434,5 +1439,171 @@ export class _Transfer extends Entity {
     } else {
       this.set("methodId", Value.fromString(value as string));
     }
+  }
+}
+
+export class _GlobalInfo extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save _GlobalInfo entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save _GlobalInfo entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("_GlobalInfo", id.toString(), this);
+  }
+
+  static load(id: string): _GlobalInfo | null {
+    return store.get("_GlobalInfo", id) as _GlobalInfo | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get allocatedSupply(): BigInt {
+    let value = this.get("allocatedSupply");
+    return value.toBigInt();
+  }
+
+  set allocatedSupply(value: BigInt) {
+    this.set("allocatedSupply", Value.fromBigInt(value));
+  }
+
+  get totalSupply(): BigInt {
+    let value = this.get("totalSupply");
+    return value.toBigInt();
+  }
+
+  set totalSupply(value: BigInt) {
+    this.set("totalSupply", Value.fromBigInt(value));
+  }
+
+  get lockedHeartsTotal(): BigInt {
+    let value = this.get("lockedHeartsTotal");
+    return value.toBigInt();
+  }
+
+  set lockedHeartsTotal(value: BigInt) {
+    this.set("lockedHeartsTotal", Value.fromBigInt(value));
+  }
+
+  get nextStakeSharesTotal(): BigInt {
+    let value = this.get("nextStakeSharesTotal");
+    return value.toBigInt();
+  }
+
+  set nextStakeSharesTotal(value: BigInt) {
+    this.set("nextStakeSharesTotal", Value.fromBigInt(value));
+  }
+
+  get shareRate(): BigInt {
+    let value = this.get("shareRate");
+    return value.toBigInt();
+  }
+
+  set shareRate(value: BigInt) {
+    this.set("shareRate", Value.fromBigInt(value));
+  }
+
+  get stakePenaltyTotal(): BigInt {
+    let value = this.get("stakePenaltyTotal");
+    return value.toBigInt();
+  }
+
+  set stakePenaltyTotal(value: BigInt) {
+    this.set("stakePenaltyTotal", Value.fromBigInt(value));
+  }
+
+  get stakeSharesTotal(): BigInt {
+    let value = this.get("stakeSharesTotal");
+    return value.toBigInt();
+  }
+
+  set stakeSharesTotal(value: BigInt) {
+    this.set("stakeSharesTotal", Value.fromBigInt(value));
+  }
+
+  get latestStakeId(): BigInt {
+    let value = this.get("latestStakeId");
+    return value.toBigInt();
+  }
+
+  set latestStakeId(value: BigInt) {
+    this.set("latestStakeId", Value.fromBigInt(value));
+  }
+
+  get totalHeartsinCirculation(): BigInt {
+    let value = this.get("totalHeartsinCirculation");
+    return value.toBigInt();
+  }
+
+  set totalHeartsinCirculation(value: BigInt) {
+    this.set("totalHeartsinCirculation", Value.fromBigInt(value));
+  }
+
+  get totalMintedHearts(): BigInt {
+    let value = this.get("totalMintedHearts");
+    return value.toBigInt();
+  }
+
+  set totalMintedHearts(value: BigInt) {
+    this.set("totalMintedHearts", Value.fromBigInt(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get blocknumber(): BigInt {
+    let value = this.get("blocknumber");
+    return value.toBigInt();
+  }
+
+  set blocknumber(value: BigInt) {
+    this.set("blocknumber", Value.fromBigInt(value));
+  }
+
+  get hexDay(): BigInt {
+    let value = this.get("hexDay");
+    return value.toBigInt();
+  }
+
+  set hexDay(value: BigInt) {
+    this.set("hexDay", Value.fromBigInt(value));
+  }
+
+  get globalInfoCount(): BigDecimal {
+    let value = this.get("globalInfoCount");
+    return value.toBigDecimal();
+  }
+
+  set globalInfoCount(value: BigDecimal) {
+    this.set("globalInfoCount", Value.fromBigDecimal(value));
+  }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
   }
 }

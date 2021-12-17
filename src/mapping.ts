@@ -1,5 +1,4 @@
 import { Address, BigDecimal, BigInt, Bytes, JSONValue, Value } from "@graphprotocol/graph-ts"
-import { ExampleEntity} from "../generated/schema"
 import { log } from '@graphprotocol/graph-ts'
 import {
   Contract,
@@ -27,6 +26,7 @@ import { _StakeEnd
         ,_TokenHolder
         ,_Transfer
         ,_MetaCounts
+        ,_GlobalInfo
 } from '../generated/schema'
 import { StakeEndData
         ,StakeStartData
@@ -100,29 +100,6 @@ function parseInput(input: Bytes): string {
 }
  
 export function handleApproval(event: Approval): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
- 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (entity == null) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
-  }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-  
-  // Entity fields can be set based on event parameters
-  entity.owner = event.params.owner
-  entity.spender = event.params.spender
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
   // Note: If a handler doesn't require existing field values, it is faster
   // _not_ to load the entity from the store. Instead, create it fresh with
   // `new Entity(...)`, set the fields that should be updated and save the
@@ -133,7 +110,7 @@ export function handleApproval(event: Approval): void {
   // example, the contract that has emitted the event can be connected to
   // with:
   //
-  //  let contract = Contract.bind(Address.fromString("0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"));
+  // let contract = Contract.bind(Address.fromString("0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"));
   //
   // The following functions can then be called on this contract to access
   // state variables and other data:
@@ -225,7 +202,7 @@ export function handleDailyDataUpdate(event: DailyDataUpdate): void {
  
   _dailyDataUpdate.updaterAddr = event.params.updaterAddr; 
   _dailyDataUpdate.data0 = event.params.data0;  
-
+  _dailyDataUpdate.transactionHash = event.transaction.hash;
 
   _dailyDataUpdate.timestamp = parsedData.getTimestamp();
   _dailyDataUpdate.beginDay = parsedData.getBeginDay(); 
@@ -282,6 +259,9 @@ export function handleDailyDataUpdate(event: DailyDataUpdate): void {
   
     _dailyDataUpdate.lobbyHexPerEth = (_lobbyHexAvailableDecimal / _lobbyEthEntered) / BigDecimal.fromString("100000000");
   }
+ 
+  handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, true);
+
   _dailyDataUpdate.save();
 }
 
@@ -304,6 +284,7 @@ export function handleShareRateChange(event: ShareRateChange): void {
  
   _shareRateChange.timestamp = parsedData.getTimestamp();
   _shareRateChange.shareRate = parsedData.getShareRate(); 
+  _shareRateChange.transactionHash = event.transaction.hash;
 
   let shareRateDecimal = parsedData.getShareRate();
  
@@ -322,7 +303,9 @@ export function handleShareRateChange(event: ShareRateChange): void {
   _shareRateChange.tShareRateHex = tShareRateHex; 
    let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
    _shareRateChange.blockNumber =  blockNumberBigDecimal;
-
+ 
+   handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
+ 
   _shareRateChange.save();
 }
 
@@ -338,6 +321,7 @@ export function handleStakeStart(event: StakeStart): void {
   _stakeStart.stakerAddr = event.params.stakerAddr; 
   _stakeStart.stakeId = event.params.stakeId; 
   _stakeStart.data0 = event.params.data0;
+  _stakeStart.transactionHash = event.transaction.hash;
 
   let d = (event.params.data0);  
 
@@ -371,6 +355,8 @@ export function handleStakeStart(event: StakeStart): void {
   //log.debug('the _currentDay: {} , startDay: {} , endDay: {}', [currentDay.toString(),_currentDay.toString(),endDay.toString()]);
   let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
   _stakeStart.blockNumber =  blockNumberBigDecimal;
+ 
+  handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
 
   _stakeStart.save();
 }
@@ -389,6 +375,7 @@ export function handleStakeEnd(event: StakeEnd): void {
   _stakeEnd.stakeId = event.params.stakeId; 
   _stakeEnd.data0 = event.params.data0;
   _stakeEnd.data1 = event.params.data1; 
+  _stakeEnd.transactionHash = event.transaction.hash;
 
   let d0 = event.params.data0; 
   let d1 = event.params.data1; 
@@ -439,6 +426,8 @@ export function handleStakeEnd(event: StakeEnd): void {
   
   let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
   _stakeEnd.blockNumber =  blockNumberBigDecimal;
+ 
+  handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
 
    _stakeEnd.save(); 
    _stakeStart.save();
@@ -457,7 +446,8 @@ export function handleStakeGoodAccounting(event: StakeGoodAccounting): void {
   _stakeGoodAccounting.stakeId = event.params.stakeId; 
   _stakeGoodAccounting.data0 = event.params.data0;
   _stakeGoodAccounting.data1 = event.params.data1;
- 
+  _stakeGoodAccounting.transactionHash = event.transaction.hash;
+
   let d0 = event.params.data0; 
   let d1 = event.params.data1;
   //log.debug('About to Convert To Binary: {}', [
@@ -486,6 +476,8 @@ export function handleStakeGoodAccounting(event: StakeGoodAccounting): void {
 
   let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
   _stakeGoodAccounting.blockNumber =  blockNumberBigDecimal;
+ 
+  handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
 
   _stakeGoodAccounting.save();
   _stakeStart.save();
@@ -506,6 +498,7 @@ export function handleXfLobbyEnter(event: XfLobbyEnter): void {
   _xfLobbyEnter.memberAddr = event.params.memberAddr; 
   _xfLobbyEnter.entryId = event.params.entryId; 
   _xfLobbyEnter.referrerAddr = event.params.referrerAddr; 
+  _xfLobbyEnter.transactionHash = event.transaction.hash;
 
   let d0 = event.params.data0; 
   
@@ -539,6 +532,7 @@ export function handleXfLobbyExit(event: XfLobbyExit): void {
   _xfLobbyExit.memberAddr = event.params.memberAddr; 
   _xfLobbyExit.entryId = event.params.entryId; 
   _xfLobbyExit.referrerAddr = event.params.referrerAddr;  
+  _xfLobbyExit.transactionHash = event.transaction.hash;
 
   let d0 = event.params.data0; 
   
@@ -553,6 +547,8 @@ export function handleXfLobbyExit(event: XfLobbyExit): void {
 
   let _xfLobbyEnter = _XfLobbyEnter.load(_XfLobbyEnterId);
   _xfLobbyEnter.xfLobbyExit = event.params.entryId.toHexString() + event.params.memberAddr.toHexString();
+ 
+  handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
 
   _xfLobbyEnter.save();
   _xfLobbyExit.save();
@@ -647,8 +643,6 @@ function updateTokenHolder(address:Address, value: string, operator:string, even
     }
   }
 
-
-
   let valueBigDecimal:BigDecimal = BigDecimal.fromString(value);
   let newTokenBalance:BigDecimal = BigDecimal.fromString("0"); 
   let newTotalSent:BigDecimal = BigDecimal.fromString("0"); 
@@ -670,4 +664,86 @@ function updateTokenHolder(address:Address, value: string, operator:string, even
   _tokenHolder.tokenBalance = newTokenBalance;
   
   _tokenHolder.save(); 
+}
+
+function handleGlobalInfo(eventTimestamp: BigInt, eventBlockNumber: BigInt, transactionHash: Bytes, bypassLimit: boolean):void{
+  
+  if(bypassLimit == false){  
+    let limiter = BigInt.fromI32(1000);
+    let withinLimit = schemaLimiter("GlobalInfo", limiter);
+    if(withinLimit == false){
+      return;
+    }
+  }
+
+  let id = eventTimestamp.toString() + transactionHash.toHexString(); 
+  let _globalInfo = _GlobalInfo.load(id);
+
+  if (_globalInfo == null) {
+    _globalInfo = new _GlobalInfo(id);
+  }
+  else {
+    return;
+  }
+ 
+  let hexContract = Contract.bind(Address.fromString("0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"));
+
+  let one = BigInt.fromI32(1);
+  let currentDay = hexContract.currentDay(); 
+  let _currentDay = currentDay.plus(one);
+
+  let globalInfo = hexContract.globalInfo();
+
+  let lockedHeartsTotal = globalInfo[0];
+  let nextStakeSharesTotal = globalInfo[1];
+  let shareRate = globalInfo[2];
+  let stakePenaltyTotal = globalInfo[3];
+  let stakeSharesTotal = globalInfo[5];
+  let latestStakeId = globalInfo[6]; 
+  let totalHeartsinCirculation = globalInfo[11];
+  
+  _globalInfo.lockedHeartsTotal = lockedHeartsTotal;
+  _globalInfo.nextStakeSharesTotal = nextStakeSharesTotal;
+  _globalInfo.shareRate = shareRate;
+  _globalInfo.stakePenaltyTotal = stakePenaltyTotal;
+  _globalInfo.stakeSharesTotal = stakeSharesTotal;
+  _globalInfo.latestStakeId = latestStakeId;
+  _globalInfo.totalHeartsinCirculation = totalHeartsinCirculation;
+  _globalInfo.hexDay = _currentDay;
+  _globalInfo.timestamp = eventTimestamp;
+  _globalInfo.blocknumber = eventBlockNumber; 
+  _globalInfo.transactionHash = transactionHash;
+  _globalInfo.totalMintedHearts = hexContract.allocatedSupply();
+  _globalInfo.allocatedSupply = hexContract.allocatedSupply();
+  _globalInfo.totalSupply = hexContract.totalSupply();
+
+  let _GlobalInfoMetaCount = _MetaCounts.load("GlobalInfo");
+  let metaIdBigDecimal = BigDecimal.fromString(_GlobalInfoMetaCount.count.toString());
+  _globalInfo.globalInfoCount = metaIdBigDecimal;
+
+  _globalInfo.save();
+}
+
+function schemaLimiter(metaCountName: string, limiter: BigInt): boolean{
+  let validSave = false; 
+  let zero = BigInt.fromI32(0);
+ 
+  let metaCount = _MetaCounts.load(metaCountName);
+  if (metaCount == null) {
+    metaCount = new _MetaCounts(metaCountName);
+    let zero = BigInt.fromI32(0);
+    metaCount.count = zero;
+  }
+  let one = BigInt.fromI32(1);
+  metaCount.count = metaCount.count.plus(one);
+  metaCount.save();
+
+  if (metaCount != null) {
+    let remainder = metaCount.count % limiter;
+    if(remainder == zero){
+      validSave = true;
+    } 
+  } 
+
+  return validSave;
 }
