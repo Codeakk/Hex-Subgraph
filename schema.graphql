@@ -151,7 +151,7 @@ type _Transfer @entity{
   timestamp:BigInt!
   transactionHash:Bytes!
   numeralIndex:BigInt!
-  gasUsed:BigInt!
+  gasLimit:BigInt!
   gasPrice:BigInt!
   input:String! 
   methodId:String

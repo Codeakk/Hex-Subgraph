@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, Bytes, JSONValue, Value } from "@graphprotocol/graph-ts"
+import { Address, BigDecimal, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import {
   Contract,
@@ -304,8 +304,6 @@ export function handleShareRateChange(event: ShareRateChange): void {
    let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
    _shareRateChange.blockNumber =  blockNumberBigDecimal;
  
-   handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
- 
   _shareRateChange.save();
 }
 
@@ -355,9 +353,7 @@ export function handleStakeStart(event: StakeStart): void {
   //log.debug('the _currentDay: {} , startDay: {} , endDay: {}', [currentDay.toString(),_currentDay.toString(),endDay.toString()]);
   let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
   _stakeStart.blockNumber =  blockNumberBigDecimal;
- 
-  handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
-
+   
   _stakeStart.save();
 }
 
@@ -404,7 +400,7 @@ export function handleStakeEnd(event: StakeEnd): void {
   _currentDay = _currentDay + one;
   let startStakeId = event.params.stakeId.toHexString();
 
-  let _stakeStart = _StakeStart.load(startStakeId);
+  let _stakeStart = _StakeStart.load(startStakeId)!;
   let dueDay:BigDecimal = _stakeStart.stakedDays + _stakeStart.startDay;
   let daysLate:BigDecimal = BigDecimal.fromString("0");
   let daysEarly:BigDecimal = BigDecimal.fromString("0");
@@ -426,9 +422,7 @@ export function handleStakeEnd(event: StakeEnd): void {
   
   let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
   _stakeEnd.blockNumber =  blockNumberBigDecimal;
- 
-  handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
-
+   
    _stakeEnd.save(); 
    _stakeStart.save();
 }
@@ -471,14 +465,12 @@ export function handleStakeGoodAccounting(event: StakeGoodAccounting): void {
   
   let startStakeId = event.params.stakeId.toHexString();
 
-  let _stakeStart = _StakeStart.load(startStakeId);
+  let _stakeStart = _StakeStart.load(startStakeId)!;
   _stakeStart.stakeGoodAccounting = event.params.stakeId.toHexString();
 
   let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
   _stakeGoodAccounting.blockNumber =  blockNumberBigDecimal;
- 
-  handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
-
+   
   _stakeGoodAccounting.save();
   _stakeStart.save();
    
@@ -545,10 +537,10 @@ export function handleXfLobbyExit(event: XfLobbyExit): void {
   
   let _XfLobbyEnterId = event.params.entryId.toHexString() + event.params.memberAddr.toHexString();
 
-  let _xfLobbyEnter = _XfLobbyEnter.load(_XfLobbyEnterId);
+  let _xfLobbyEnter = _XfLobbyEnter.load(_XfLobbyEnterId)!;
   _xfLobbyEnter.xfLobbyExit = event.params.entryId.toHexString() + event.params.memberAddr.toHexString();
  
-  handleGlobalInfo(event.block.timestamp, event.block.number, event.transaction.hash, false);
+
 
   _xfLobbyEnter.save();
   _xfLobbyExit.save();
@@ -579,7 +571,7 @@ export function handleTransfer(event: Transfer): void {
 
   _transfer.numeralIndex = _metaCount.count;
   _transfer.transactionHash = event.transaction.hash;
-  _transfer.gasUsed = event.transaction.gasUsed;
+  _transfer.gasLimit = event.transaction.gasLimit;
   _transfer.gasPrice = event.transaction.gasPrice;
 
   _transfer.input = event.transaction.input.toHexString();
@@ -669,8 +661,8 @@ function updateTokenHolder(address:Address, value: string, operator:string, even
 function handleGlobalInfo(eventTimestamp: BigInt, eventBlockNumber: BigInt, transactionHash: Bytes, bypassLimit: boolean):void{
   
   if(bypassLimit == false){  
-    let limiter = BigInt.fromI32(1000);
-    let withinLimit = schemaLimiter("GlobalInfo", limiter);
+    let limiter = BigInt.fromI32(240);
+    let withinLimit = schemaLimiter("GlobalInfoLatestBlock", limiter, eventBlockNumber);
     if(withinLimit == false){
       return;
     }
@@ -717,33 +709,55 @@ function handleGlobalInfo(eventTimestamp: BigInt, eventBlockNumber: BigInt, tran
   _globalInfo.allocatedSupply = hexContract.allocatedSupply();
   _globalInfo.totalSupply = hexContract.totalSupply();
 
-  let _GlobalInfoMetaCount = _MetaCounts.load("GlobalInfo");
-  let metaIdBigDecimal = BigDecimal.fromString(_GlobalInfoMetaCount.count.toString());
-  _globalInfo.globalInfoCount = metaIdBigDecimal;
+  let zero = BigInt.fromI32(0); 
+  let _GlobalInfoMetaCount = _MetaCounts.load("GlobalInfo"); 
+  if (_GlobalInfoMetaCount == null) {
+    _GlobalInfoMetaCount = new _MetaCounts("GlobalInfo"); 
+    _GlobalInfoMetaCount.count = zero;
+  } 
 
+  let _GlobalInfoDailyMetaCount = _MetaCounts.load("GlobalInfoDaily"); 
+  if (_GlobalInfoDailyMetaCount == null) { 
+    _GlobalInfoDailyMetaCount = new _MetaCounts("GlobalInfoDaily"); 
+    _GlobalInfoDailyMetaCount.count = _currentDay
+    
+  } 
+  if(_currentDay > _GlobalInfoDailyMetaCount.count){
+    _GlobalInfoMetaCount.count = zero
+  }
+  _GlobalInfoDailyMetaCount.count = _currentDay
+
+  _GlobalInfoMetaCount.count = _GlobalInfoMetaCount.count.plus(one);
+
+  let countString = _GlobalInfoMetaCount.count.toString();
+  let metaIdBigDecimal = BigDecimal.fromString(countString);
+  _globalInfo.globalInfoCount = metaIdBigDecimal;
+  
+  _GlobalInfoDailyMetaCount.save();
+  _GlobalInfoMetaCount.save();
   _globalInfo.save();
 }
 
-function schemaLimiter(metaCountName: string, limiter: BigInt): boolean{
+function schemaLimiter(metaCountName: string, limiter: BigInt, eventBlockNumber: BigInt): boolean{
   let validSave = false; 
-  let zero = BigInt.fromI32(0);
- 
   let metaCount = _MetaCounts.load(metaCountName);
   if (metaCount == null) {
-    metaCount = new _MetaCounts(metaCountName);
-    let zero = BigInt.fromI32(0);
-    metaCount.count = zero;
-  }
-  let one = BigInt.fromI32(1);
-  metaCount.count = metaCount.count.plus(one);
-  metaCount.save();
-
+    metaCount = new _MetaCounts(metaCountName); 
+    metaCount.count = eventBlockNumber;
+  } 
   if (metaCount != null) {
-    let remainder = metaCount.count % limiter;
-    if(remainder == zero){
+    let nextValidBlock = metaCount.count + limiter; 
+    if(nextValidBlock < eventBlockNumber){ 
+      metaCount.count = eventBlockNumber;
       validSave = true;
     } 
   } 
 
+  metaCount.save();
+
   return validSave;
+}
+
+export function handleBlock(block: ethereum.Block):void{
+  handleGlobalInfo(block.timestamp, block.number, block.hash, false);
 }
