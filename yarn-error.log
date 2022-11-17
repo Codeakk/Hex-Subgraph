@@ -1,0 +1,53 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\codea\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js global dir
+
+PATH: 
+  C:\Python310\Scripts\;C:\Python310\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\libnvvp;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\libnvvp;;C:\Users\codea\AppData\Local\Programs\Python\Python38-32;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0\libnvvp;C:\Program Files\AdoptOpenJDK\jdk-8.0.222.10-openj9\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Users\codea\AppData\Local\Programs\Python\Python38-32\Scripts;C:\Windows\System32;C:\Windows;C:\Windows\System32\wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\GnuPG\bin;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files\WireGuard\;C:\Program Files\PuTTY\;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\NVIDIA Corporation\Nsight Compute 2022.1.0\;C:\Program Files\NVIDIA Corporation\Nsight Compute 2019.4.0\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\nodejs\;C:\Program Files\Cloudflare\Cloudflare WARP\;C:\Users\codea\.cargo\bin;C:\Users\codea\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\codea\AppData\Local\Programs\Python\Python38-32\;C:\Users\codea\AppData\Local\Programs\Python\Python38-32;C:\Ruby25-x64\bin;C:\Users\codea\AppData\Local\Microsoft\WindowsApps;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0\extras\CUPTI\libx64;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0\include;c:\tools\cuda\bin;C:\Program Files\JetBrains\PyCharm Community Edition 2019.2.5\bin;C:\Users\codea\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\IPFS Desktop\resources\app.asar.unpacked\src\ipfs-on-path\scripts\bin-win;C:\Program Files\PostgreSQL\13\bin;C:\Program Files\PostgreSQL\13\lib;C:\Program Files\JetBrains\PyCharm Community Edition 2020.2.3\bin;;C:\Users\codea\AppData\Local\GitHubDesktop\bin;C:\Program Files\Azure Data Studio\bin;C:\Users\codea\AppData\Local\Microsoft\WindowsApps;C:\Users\codea\.dotnet\tools;C:\Users\codea\AppData\Roaming\npm
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  16.17.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  SyntaxError: C:\Users\codea\Documents\aaDays\next\root\Hex-Subgraph\package.json: Unexpected token / in JSON at position 734
+      at JSON.parse (<anonymous>)
+      at C:\Users\codea\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\codea\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\codea\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "Hex",
+    "license": "UNLICENSED",
+    "scripts": {
+      "codegen": "graph codegen",
+      "auth": "graph auth --product hosted-service 73bb7223f7fb483fae64d626ff1ad479",
+      "build": "graph build", 
+      "deploy": "graph deploy --product hosted-service codeakk/hex",
+      "create-local": "graph create --node http://localhost:8020/ Codeakk/Hex",
+      "remove-local": "graph remove --node http://localhost:8020/ Codeakk/Hex",
+      "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Codeakk/Hex"
+    },
+    "dependencies": {
+      "@graphprotocol/graph-ts": "^0.29.0",
+      "@types/bn.js": "^4.11.6",
+      "@types/node": "^14.11.2"
+    },
+    "devDependencies": {
+      "@graphprotocol/graph-cli": "^0.36.0",
+      "ts-loader": "^8.0.4"
+    }
+  }
+  // graph auth --product hosted-service <ACCESS_TOKEN>
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
