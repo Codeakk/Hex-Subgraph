@@ -15,19 +15,6 @@ export class _StakeStart extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("stakerAddr", Value.fromBytes(Bytes.empty()));
-    this.set("stakeId", Value.fromBigInt(BigInt.zero()));
-    this.set("data0", Value.fromBigInt(BigInt.zero()));
-    this.set("timestamp", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("stakedHearts", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("stakeShares", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("stakedDays", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("stakeTShares", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("startDay", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("endDay", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("blockNumber", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -36,8 +23,7 @@ export class _StakeStart extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _StakeStart entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _StakeStart must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_StakeStart", id.toString(), this);
     }
@@ -83,40 +69,40 @@ export class _StakeStart extends Entity {
     this.set("data0", Value.fromBigInt(value));
   }
 
-  get timestamp(): BigDecimal {
+  get timestamp(): BigInt {
     let value = this.get("timestamp");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set timestamp(value: BigDecimal) {
-    this.set("timestamp", Value.fromBigDecimal(value));
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get stakedHearts(): BigDecimal {
+  get stakedHearts(): BigInt {
     let value = this.get("stakedHearts");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set stakedHearts(value: BigDecimal) {
-    this.set("stakedHearts", Value.fromBigDecimal(value));
+  set stakedHearts(value: BigInt) {
+    this.set("stakedHearts", Value.fromBigInt(value));
   }
 
-  get stakeShares(): BigDecimal {
+  get stakeShares(): BigInt {
     let value = this.get("stakeShares");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set stakeShares(value: BigDecimal) {
-    this.set("stakeShares", Value.fromBigDecimal(value));
+  set stakeShares(value: BigInt) {
+    this.set("stakeShares", Value.fromBigInt(value));
   }
 
-  get stakedDays(): BigDecimal {
+  get stakedDays(): BigInt {
     let value = this.get("stakedDays");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set stakedDays(value: BigDecimal) {
-    this.set("stakedDays", Value.fromBigDecimal(value));
+  set stakedDays(value: BigInt) {
+    this.set("stakedDays", Value.fromBigInt(value));
   }
 
   get isAutoStake(): boolean {
@@ -137,22 +123,22 @@ export class _StakeStart extends Entity {
     this.set("stakeTShares", Value.fromBigDecimal(value));
   }
 
-  get startDay(): BigDecimal {
+  get startDay(): BigInt {
     let value = this.get("startDay");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set startDay(value: BigDecimal) {
-    this.set("startDay", Value.fromBigDecimal(value));
+  set startDay(value: BigInt) {
+    this.set("startDay", Value.fromBigInt(value));
   }
 
-  get endDay(): BigDecimal {
+  get endDay(): BigInt {
     let value = this.get("endDay");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set endDay(value: BigDecimal) {
-    this.set("endDay", Value.fromBigDecimal(value));
+  set endDay(value: BigInt) {
+    this.set("endDay", Value.fromBigInt(value));
   }
 
   get stakeEnd(): string | null {
@@ -212,21 +198,6 @@ export class _StakeEnd extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("stakerAddr", Value.fromBytes(Bytes.empty()));
-    this.set("stakeId", Value.fromBigInt(BigInt.zero()));
-    this.set("data0", Value.fromBigInt(BigInt.zero()));
-    this.set("data1", Value.fromBigInt(BigInt.zero()));
-    this.set("payout", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("stakedHearts", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("stakedShares", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("timestamp", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("penalty", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("servedDays", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("daysLate", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("daysEarly", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("blockNumber", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -235,8 +206,7 @@ export class _StakeEnd extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _StakeEnd entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _StakeEnd must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_StakeEnd", id.toString(), this);
     }
@@ -291,58 +261,58 @@ export class _StakeEnd extends Entity {
     this.set("data1", Value.fromBigInt(value));
   }
 
-  get payout(): BigDecimal {
+  get payout(): BigInt {
     let value = this.get("payout");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set payout(value: BigDecimal) {
-    this.set("payout", Value.fromBigDecimal(value));
+  set payout(value: BigInt) {
+    this.set("payout", Value.fromBigInt(value));
   }
 
-  get stakedHearts(): BigDecimal {
+  get stakedHearts(): BigInt {
     let value = this.get("stakedHearts");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set stakedHearts(value: BigDecimal) {
-    this.set("stakedHearts", Value.fromBigDecimal(value));
+  set stakedHearts(value: BigInt) {
+    this.set("stakedHearts", Value.fromBigInt(value));
   }
 
-  get stakedShares(): BigDecimal {
+  get stakedShares(): BigInt {
     let value = this.get("stakedShares");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set stakedShares(value: BigDecimal) {
-    this.set("stakedShares", Value.fromBigDecimal(value));
+  set stakedShares(value: BigInt) {
+    this.set("stakedShares", Value.fromBigInt(value));
   }
 
-  get timestamp(): BigDecimal {
+  get timestamp(): BigInt {
     let value = this.get("timestamp");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set timestamp(value: BigDecimal) {
-    this.set("timestamp", Value.fromBigDecimal(value));
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get penalty(): BigDecimal {
+  get penalty(): BigInt {
     let value = this.get("penalty");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set penalty(value: BigDecimal) {
-    this.set("penalty", Value.fromBigDecimal(value));
+  set penalty(value: BigInt) {
+    this.set("penalty", Value.fromBigInt(value));
   }
 
-  get servedDays(): BigDecimal {
+  get servedDays(): BigInt {
     let value = this.get("servedDays");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set servedDays(value: BigDecimal) {
-    this.set("servedDays", Value.fromBigDecimal(value));
+  set servedDays(value: BigInt) {
+    this.set("servedDays", Value.fromBigInt(value));
   }
 
   get prevUnlocked(): boolean {
@@ -354,22 +324,22 @@ export class _StakeEnd extends Entity {
     this.set("prevUnlocked", Value.fromBoolean(value));
   }
 
-  get daysLate(): BigDecimal {
+  get daysLate(): BigInt {
     let value = this.get("daysLate");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set daysLate(value: BigDecimal) {
-    this.set("daysLate", Value.fromBigDecimal(value));
+  set daysLate(value: BigInt) {
+    this.set("daysLate", Value.fromBigInt(value));
   }
 
-  get daysEarly(): BigDecimal {
+  get daysEarly(): BigInt {
     let value = this.get("daysEarly");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set daysEarly(value: BigDecimal) {
-    this.set("daysEarly", Value.fromBigDecimal(value));
+  set daysEarly(value: BigInt) {
+    this.set("daysEarly", Value.fromBigInt(value));
   }
 
   get blockNumber(): BigDecimal {
@@ -395,18 +365,6 @@ export class _StakeGoodAccounting extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("stakerAddr", Value.fromBytes(Bytes.empty()));
-    this.set("stakeId", Value.fromBigInt(BigInt.zero()));
-    this.set("data0", Value.fromBigInt(BigInt.zero()));
-    this.set("data1", Value.fromBigInt(BigInt.zero()));
-    this.set("payout", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("stakedHearts", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("stakedShares", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("timestamp", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("penalty", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("blockNumber", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -415,8 +373,7 @@ export class _StakeGoodAccounting extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _StakeGoodAccounting entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _StakeGoodAccounting must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_StakeGoodAccounting", id.toString(), this);
     }
@@ -473,49 +430,49 @@ export class _StakeGoodAccounting extends Entity {
     this.set("data1", Value.fromBigInt(value));
   }
 
-  get payout(): BigDecimal {
+  get payout(): BigInt {
     let value = this.get("payout");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set payout(value: BigDecimal) {
-    this.set("payout", Value.fromBigDecimal(value));
+  set payout(value: BigInt) {
+    this.set("payout", Value.fromBigInt(value));
   }
 
-  get stakedHearts(): BigDecimal {
+  get stakedHearts(): BigInt {
     let value = this.get("stakedHearts");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set stakedHearts(value: BigDecimal) {
-    this.set("stakedHearts", Value.fromBigDecimal(value));
+  set stakedHearts(value: BigInt) {
+    this.set("stakedHearts", Value.fromBigInt(value));
   }
 
-  get stakedShares(): BigDecimal {
+  get stakedShares(): BigInt {
     let value = this.get("stakedShares");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set stakedShares(value: BigDecimal) {
-    this.set("stakedShares", Value.fromBigDecimal(value));
+  set stakedShares(value: BigInt) {
+    this.set("stakedShares", Value.fromBigInt(value));
   }
 
-  get timestamp(): BigDecimal {
+  get timestamp(): BigInt {
     let value = this.get("timestamp");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set timestamp(value: BigDecimal) {
-    this.set("timestamp", Value.fromBigDecimal(value));
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get penalty(): BigDecimal {
+  get penalty(): BigInt {
     let value = this.get("penalty");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set penalty(value: BigDecimal) {
-    this.set("penalty", Value.fromBigDecimal(value));
+  set penalty(value: BigInt) {
+    this.set("penalty", Value.fromBigInt(value));
   }
 
   get blockNumber(): BigDecimal {
@@ -541,15 +498,6 @@ export class _ShareRateChange extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("stakeId", Value.fromBigInt(BigInt.zero()));
-    this.set("data0", Value.fromBigInt(BigInt.zero()));
-    this.set("timestamp", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("shareRate", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("tShareRateHearts", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("tShareRateHex", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("blockNumber", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -558,8 +506,7 @@ export class _ShareRateChange extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _ShareRateChange entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _ShareRateChange must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_ShareRateChange", id.toString(), this);
     }
@@ -598,22 +545,22 @@ export class _ShareRateChange extends Entity {
     this.set("data0", Value.fromBigInt(value));
   }
 
-  get timestamp(): BigDecimal {
+  get timestamp(): BigInt {
     let value = this.get("timestamp");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set timestamp(value: BigDecimal) {
-    this.set("timestamp", Value.fromBigDecimal(value));
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get shareRate(): BigDecimal {
+  get shareRate(): BigInt {
     let value = this.get("shareRate");
-    return value!.toBigDecimal();
+    return value!.toBigInt();
   }
 
-  set shareRate(value: BigDecimal) {
-    this.set("shareRate", Value.fromBigDecimal(value));
+  set shareRate(value: BigInt) {
+    this.set("shareRate", Value.fromBigInt(value));
   }
 
   get tShareRateHearts(): BigDecimal {
@@ -657,12 +604,6 @@ export class _Claim extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("data0", Value.fromBigInt(BigInt.zero()));
-    this.set("data1", Value.fromBigInt(BigInt.zero()));
-    this.set("btcAddr", Value.fromBytes(Bytes.empty()));
-    this.set("claimToAddr", Value.fromBytes(Bytes.empty()));
-    this.set("referrerAddr", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -671,8 +612,7 @@ export class _Claim extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _Claim entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _Claim must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_Claim", id.toString(), this);
     }
@@ -741,11 +681,6 @@ export class _ClaimAssist extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("data0", Value.fromBigInt(BigInt.zero()));
-    this.set("data1", Value.fromBigInt(BigInt.zero()));
-    this.set("data2", Value.fromBigInt(BigInt.zero()));
-    this.set("senderAddr", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -754,8 +689,7 @@ export class _ClaimAssist extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _ClaimAssist entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _ClaimAssist must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_ClaimAssist", id.toString(), this);
     }
@@ -815,16 +749,6 @@ export class _DailyDataUpdate extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("updaterAddr", Value.fromBytes(Bytes.empty()));
-    this.set("data0", Value.fromBigInt(BigInt.zero()));
-    this.set("timestamp", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("payout", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("shares", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("sats", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("payoutPerTShare", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("blockNumber", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -833,8 +757,7 @@ export class _DailyDataUpdate extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _DailyDataUpdate entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _DailyDataUpdate must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_DailyDataUpdate", id.toString(), this);
     }
@@ -1019,15 +942,6 @@ export class _XfLobbyEnter extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("timestamp", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("memberAddr", Value.fromBytes(Bytes.empty()));
-    this.set("entryId", Value.fromBigInt(BigInt.zero()));
-    this.set("rawAmount", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("referrerAddr", Value.fromBytes(Bytes.empty()));
-    this.set("data0", Value.fromBigInt(BigInt.zero()));
-    this.set("enterDay", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -1036,8 +950,7 @@ export class _XfLobbyEnter extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _XfLobbyEnter entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _XfLobbyEnter must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_XfLobbyEnter", id.toString(), this);
     }
@@ -1150,14 +1063,6 @@ export class _XfLobbyExit extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("timestamp", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("memberAddr", Value.fromBytes(Bytes.empty()));
-    this.set("entryId", Value.fromBigInt(BigInt.zero()));
-    this.set("xfAmount", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("referrerAddr", Value.fromBytes(Bytes.empty()));
-    this.set("data0", Value.fromBigInt(BigInt.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -1166,8 +1071,7 @@ export class _XfLobbyExit extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _XfLobbyExit entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _XfLobbyExit must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_XfLobbyExit", id.toString(), this);
     }
@@ -1254,8 +1158,6 @@ export class _MetaCounts extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("count", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -1264,8 +1166,7 @@ export class _MetaCounts extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _MetaCounts entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _MetaCounts must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_MetaCounts", id.toString(), this);
     }
@@ -1298,17 +1199,6 @@ export class _TokenHolder extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("numeralIndex", Value.fromBigInt(BigInt.zero()));
-    this.set("holderAddress", Value.fromBytes(Bytes.empty()));
-    this.set("totalSent", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("totalReceived", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("tokenBalance", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("createdTimeStamp", Value.fromBigInt(BigInt.zero()));
-    this.set("createdBlocknumber", Value.fromBigInt(BigInt.zero()));
-    this.set("createdHexDay", Value.fromBigInt(BigInt.zero()));
-    this.set("lastModifiedHexDay", Value.fromBigInt(BigInt.zero()));
-    this.set("lastModifiedTimeStamp", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -1317,8 +1207,7 @@ export class _TokenHolder extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _TokenHolder entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _TokenHolder must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_TokenHolder", id.toString(), this);
     }
@@ -1432,17 +1321,6 @@ export class _Transfer extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("from", Value.fromBytes(Bytes.empty()));
-    this.set("to", Value.fromBytes(Bytes.empty()));
-    this.set("value", Value.fromBigInt(BigInt.zero()));
-    this.set("hexDay", Value.fromBigInt(BigInt.zero()));
-    this.set("timestamp", Value.fromBigInt(BigInt.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
-    this.set("numeralIndex", Value.fromBigInt(BigInt.zero()));
-    this.set("gasLimit", Value.fromBigInt(BigInt.zero()));
-    this.set("gasPrice", Value.fromBigInt(BigInt.zero()));
-    this.set("input", Value.fromString(""));
   }
 
   save(): void {
@@ -1451,8 +1329,7 @@ export class _Transfer extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _Transfer entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _Transfer must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_Transfer", id.toString(), this);
     }
@@ -1583,22 +1460,6 @@ export class _GlobalInfo extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("allocatedSupply", Value.fromBigInt(BigInt.zero()));
-    this.set("totalSupply", Value.fromBigInt(BigInt.zero()));
-    this.set("lockedHeartsTotal", Value.fromBigInt(BigInt.zero()));
-    this.set("nextStakeSharesTotal", Value.fromBigInt(BigInt.zero()));
-    this.set("shareRate", Value.fromBigInt(BigInt.zero()));
-    this.set("stakePenaltyTotal", Value.fromBigInt(BigInt.zero()));
-    this.set("stakeSharesTotal", Value.fromBigInt(BigInt.zero()));
-    this.set("latestStakeId", Value.fromBigInt(BigInt.zero()));
-    this.set("totalHeartsinCirculation", Value.fromBigInt(BigInt.zero()));
-    this.set("totalMintedHearts", Value.fromBigInt(BigInt.zero()));
-    this.set("timestamp", Value.fromBigInt(BigInt.zero()));
-    this.set("blocknumber", Value.fromBigInt(BigInt.zero()));
-    this.set("hexDay", Value.fromBigInt(BigInt.zero()));
-    this.set("globalInfoCount", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -1607,8 +1468,7 @@ export class _GlobalInfo extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save _GlobalInfo entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type _GlobalInfo must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("_GlobalInfo", id.toString(), this);
     }

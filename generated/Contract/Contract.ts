@@ -338,6 +338,18 @@ export class Contract__dailyDataResult {
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     return map;
   }
+
+  getDayPayoutTotal(): BigInt {
+    return this.value0;
+  }
+
+  getDayStakeSharesTotal(): BigInt {
+    return this.value1;
+  }
+
+  getDayUnclaimedSatoshisTotal(): BigInt {
+    return this.value2;
+  }
 }
 
 export class Contract__globalsResult {
@@ -384,6 +396,38 @@ export class Contract__globalsResult {
     map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
     map.set("value7", ethereum.Value.fromUnsignedBigInt(this.value7));
     return map;
+  }
+
+  getLockedHeartsTotal(): BigInt {
+    return this.value0;
+  }
+
+  getNextStakeSharesTotal(): BigInt {
+    return this.value1;
+  }
+
+  getShareRate(): BigInt {
+    return this.value2;
+  }
+
+  getStakePenaltyTotal(): BigInt {
+    return this.value3;
+  }
+
+  getDailyDataCount(): i32 {
+    return this.value4;
+  }
+
+  getStakeSharesTotal(): BigInt {
+    return this.value5;
+  }
+
+  getLatestStakeId(): BigInt {
+    return this.value6;
+  }
+
+  getClaimStats(): BigInt {
+    return this.value7;
   }
 }
 
@@ -434,6 +478,34 @@ export class Contract__stakeListsResult {
     map.set("value6", ethereum.Value.fromBoolean(this.value6));
     return map;
   }
+
+  getStakeId(): BigInt {
+    return this.value0;
+  }
+
+  getStakedHearts(): BigInt {
+    return this.value1;
+  }
+
+  getStakeShares(): BigInt {
+    return this.value2;
+  }
+
+  getLockedDay(): i32 {
+    return this.value3;
+  }
+
+  getStakedDays(): i32 {
+    return this.value4;
+  }
+
+  getUnlockedDay(): i32 {
+    return this.value5;
+  }
+
+  getIsAutoStake(): boolean {
+    return this.value6;
+  }
 }
 
 export class Contract__xfLobbyEntryResult {
@@ -451,6 +523,14 @@ export class Contract__xfLobbyEntryResult {
     map.set("value1", ethereum.Value.fromAddress(this.value1));
     return map;
   }
+
+  getRawAmount(): BigInt {
+    return this.value0;
+  }
+
+  getReferrerAddr(): Address {
+    return this.value1;
+  }
 }
 
 export class Contract__xfLobbyMembersResult {
@@ -467,6 +547,14 @@ export class Contract__xfLobbyMembersResult {
     map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
     map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
     return map;
+  }
+
+  getHeadIndex(): BigInt {
+    return this.value0;
+  }
+
+  getTailIndex(): BigInt {
+    return this.value1;
   }
 }
 

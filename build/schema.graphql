@@ -3,14 +3,14 @@ type _StakeStart @entity {
   stakerAddr:Bytes!
   stakeId:BigInt!
   data0:BigInt! 
-  timestamp:BigDecimal!
-  stakedHearts:BigDecimal!
-  stakeShares:BigDecimal!
-  stakedDays:BigDecimal!
+  timestamp:BigInt!
+  stakedHearts:BigInt!
+  stakeShares:BigInt!
+  stakedDays:BigInt!
   isAutoStake:Boolean! 
   stakeTShares:BigDecimal! 
-  startDay:BigDecimal!
-  endDay:BigDecimal! 
+  startDay:BigInt!
+  endDay:BigInt! 
   stakeEnd:_StakeEnd
   stakeGoodAccounting:_StakeGoodAccounting
   blockNumber: BigDecimal!
@@ -23,15 +23,15 @@ type _StakeEnd @entity {
   stakeId:BigInt!
   data0:BigInt!
   data1:BigInt! 
-  payout:BigDecimal!
-  stakedHearts:BigDecimal!
-  stakedShares:BigDecimal!
-  timestamp:BigDecimal!
-  penalty:BigDecimal!
-  servedDays: BigDecimal!
+  payout:BigInt!
+  stakedHearts:BigInt!
+  stakedShares:BigInt!
+  timestamp:BigInt!
+  penalty:BigInt!
+  servedDays: BigInt!
   prevUnlocked: Boolean!  
-  daysLate:BigDecimal!
-  daysEarly:BigDecimal!
+  daysLate:BigInt!
+  daysEarly:BigInt!
   blockNumber: BigDecimal!
   transactionHash:Bytes!
 }
@@ -42,11 +42,11 @@ type _StakeGoodAccounting @entity{
   stakeId:BigInt!
   data0:BigInt!
   data1:BigInt! 
-  payout:BigDecimal!
-  stakedHearts:BigDecimal!
-  stakedShares:BigDecimal!
-  timestamp:BigDecimal!
-  penalty:BigDecimal!
+  payout:BigInt!
+  stakedHearts:BigInt!
+  stakedShares:BigInt!
+  timestamp:BigInt!
+  penalty:BigInt!
   blockNumber: BigDecimal!
   transactionHash:Bytes!
 }
@@ -55,8 +55,8 @@ type _ShareRateChange @entity{
   id: ID! 
   stakeId:BigInt!
   data0:BigInt!
-  timestamp:BigDecimal! 
-  shareRate:BigDecimal!
+  timestamp:BigInt! 
+  shareRate:BigInt!
   tShareRateHearts:BigDecimal!
   tShareRateHex:BigDecimal!
   blockNumber: BigDecimal!

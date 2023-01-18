@@ -19,12 +19,6 @@ function binaryStrToBigDecimal(binaryStr: string): BigDecimal {
     return v3;  
 }
 
-function binaryStrToiString(binaryStr: string): string {
-    let v1 = parseInt(binaryStr,2);    
-    let v2: i32 = v1 as i32;
-    let v3 = v2.toString();
-    return v3;  
-}
 
 function binaryStrToBoolean(binaryStr: string): boolean { 
     let v1 = parseInt(binaryStr,2);
@@ -47,42 +41,32 @@ export class StakeEndData {
     uint16            servedDays      -->  data1 [ 87: 72]
     bool              prevUnlocked    -->  data1 [ 95: 88]
 */
-    timestamp: BigDecimal;
-    stakedHearts: BigDecimal;
-    stakeShares: BigDecimal;
-    payout: BigDecimal;
-    penalty: BigDecimal;
-    servedDays: BigDecimal;
+    timestamp: BigInt;
+    stakedHearts: BigInt;
+    stakeShares: BigInt;
+    payout: BigInt;
+    penalty: BigInt;
+    servedDays: BigInt;
     prevUnlocked: boolean;
 
-    constructor(data0BinaryStr: string, data1BinaryStr: string) {  
-        //log.debug('the data0BinaryStr: {}', [data0BinaryStr.toString()]);
-        //log.debug('the data1BinaryStr: {}', [data1BinaryStr.toString()]);
+    constructor(data0: BigInt, data1: BigInt, data0BinaryStr: string, data1BinaryStr: string) {  
 
-        let timestampSlice = data0BinaryStr.slice(-39); 
-        this.timestamp = binaryStrToBigDecimal(timestampSlice);
-
-        let stakedHeartsSlice = data0BinaryStr.slice(-111,-40);  
-        this.stakedHearts = binaryStrToBigDecimal(stakedHeartsSlice);  
-
-        let stakeSharesSlice = data0BinaryStr.slice(-183,-112);  
-        this.stakeShares = binaryStrToBigDecimal(stakeSharesSlice);
+        this.timestamp = data0.bitAnd(BigInt.fromI32(1).leftShift(40).minus(BigInt.fromI32(1)));
+        this.stakedHearts = data0.rightShift(40).bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
+        this.stakeShares = data0.rightShift(112).bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
 
         if(data0BinaryStr.length >= 184){ 
-            let payoutSlice = data0BinaryStr.slice(-255,-184);  
-            this.payout = binaryStrToBigDecimal(payoutSlice); 
+            this.payout = data0.rightShift(184).bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
         } 
-        else this.payout = BigDecimal.fromString("0");
+        else this.payout = BigInt.fromString("0");
 
-        if(data1BinaryStr != "0"){
-            let penaltySlice = data1BinaryStr.slice(-71);  
-            this.penalty = binaryStrToBigDecimal(penaltySlice);  
+        if(data1BinaryStr != "0"){ 
+            this.penalty = data1.bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
 
             if(data1BinaryStr.length >= 72){ 
-                let servedDaysSlice = data1BinaryStr.slice(-87,-72);  
-                this.servedDays = binaryStrToBigDecimal(servedDaysSlice); 
+                this.servedDays = data1.rightShift(72).bitAnd(BigInt.fromI32(1).leftShift(16).minus(BigInt.fromI32(1)));
             }
-            else  this.servedDays = BigDecimal.fromString("0");
+            else this.servedDays = BigInt.fromString("0");
 
             if(data1BinaryStr.length >= 88){ 
                 let prevUnlockedSlice = data1BinaryStr.slice(-95,-88);  
@@ -94,36 +78,36 @@ export class StakeEndData {
             }
         }
         else{
-            this.penalty = BigDecimal.fromString("0");
-            this.servedDays = BigDecimal.fromString("0");
+            this.penalty = BigInt.fromString("0");
+            this.servedDays = BigInt.fromString("0");
             let v3: boolean = false as boolean;
             this.prevUnlocked = v3;
         } 
     }
     
-    getTimestamp(): BigDecimal {
+    getTimestamp(): BigInt {
         return this.timestamp;
     }
-    getStakedHearts(): BigDecimal {
+    getStakedHearts(): BigInt {
         return this.stakedHearts;
     }
-    getStakedShares(): BigDecimal {
+    getStakedShares(): BigInt {
         return this.stakeShares;
     }
-    getPayout(): BigDecimal {
+    getPayout(): BigInt {
         return this.payout;
     }
-    getPenalty(): BigDecimal {
+    getPenalty(): BigInt {
         return this.penalty;
     }
-    getServedDays(): BigDecimal {
+    getServedDays(): BigInt {
         return this.servedDays;
     }
     getPrevUnlocked(): boolean {
         return this.prevUnlocked;
     }
 }
- 
+
 export class StakeStartData {
 /*  StakeStart        (auto-generated event) 
     uint40            timestamp       -->  data0 [ 39:  0]
@@ -134,27 +118,19 @@ export class StakeStartData {
     uint16            stakedDays      -->  data0 [199:184]
     bool              isAutoStake     -->  data0 [207:200]
 */
-    timestamp: BigDecimal;
-    stakedHearts: BigDecimal;
-    stakeShares: BigDecimal;
-    stakedDays: BigDecimal;
+    timestamp: BigInt;
+    stakedHearts: BigInt;
+    stakeShares: BigInt;
+    stakedDays: BigInt;
     isAutoStake: boolean; 
 
-    constructor(data0BinaryStr: string) {  
-        //log.debug('the data0BinaryStr: {}', [data0BinaryStr.toString()]);
-        //log.debug('the data1BinaryStr: {}', [data1BinaryStr.toString()]);
-        let timestampSlice = data0BinaryStr.slice(-39); 
-        this.timestamp = binaryStrToBigDecimal(timestampSlice);
+    constructor(data0: BigInt, data0BinaryStr: string) {    
 
-        let stakedHeartsSlice = data0BinaryStr.slice(-111,-40);  
-        this.stakedHearts = binaryStrToBigDecimal(stakedHeartsSlice);  
-
-        let stakeSharesSlice = data0BinaryStr.slice(-183,-112);  
-        this.stakeShares = binaryStrToBigDecimal(stakeSharesSlice);
-
-        let stakedDaysSlice = data0BinaryStr.slice(-199,-184);  
-        this.stakedDays = binaryStrToBigDecimal(stakedDaysSlice); 
-
+        this.timestamp = data0.bitAnd(BigInt.fromI32(1).leftShift(40).minus(BigInt.fromI32(1)));
+        this.stakedHearts = data0.rightShift(40).bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
+        this.stakeShares = data0.rightShift(112).bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
+        this.stakedDays = data0.rightShift(184).bitAnd(BigInt.fromI32(1).leftShift(16).minus(BigInt.fromI32(1)));
+          
         if(data0BinaryStr.length >= 200){ 
         let isAutoStakeSlice = data0BinaryStr.slice(-207,-200);  
         this.isAutoStake = binaryStrToBoolean(isAutoStakeSlice);  
@@ -166,16 +142,16 @@ export class StakeStartData {
  
     }
     
-    getTimestamp(): BigDecimal {
+    getTimestamp(): BigInt {
         return this.timestamp;
     }
-    getStakedHearts(): BigDecimal {
+    getStakedHearts(): BigInt {
         return this.stakedHearts;
     }
-    getStakedShares(): BigDecimal {
+    getStakedShares(): BigInt {
         return this.stakeShares;
     }
-    getStakedDays(): BigDecimal {
+    getStakedDays(): BigInt {
         return this.stakedDays;
     }
     getIsAutoStake(): boolean {
@@ -194,51 +170,43 @@ export class StakeGoodAccountingData {
     uint72            penalty         -->  data1 [ 71:  0]
     address  indexed  senderAddr
 */
-    timestamp: BigDecimal;
-    stakedHearts: BigDecimal;
-    stakeShares: BigDecimal;
-    payout: BigDecimal;
-    penalty: BigDecimal; 
+    timestamp: BigInt;
+    stakedHearts: BigInt;
+    stakeShares: BigInt;
+    payout: BigInt;
+    penalty: BigInt; 
 
-    constructor(data0BinaryStr: string, data1BinaryStr: string) {  
-        //log.debug('the data0BinaryStr: {}', [data0BinaryStr.toString()]);
-        //log.debug('the data1BinaryStr: {}', [data1BinaryStr.toString()]);
-        let timestampSlice = data0BinaryStr.slice(-39); 
-        this.timestamp = binaryStrToBigDecimal(timestampSlice);
+    constructor(data0: BigInt, data1: BigInt, data0BinaryStr: string, data1BinaryStr: string) {
 
-        let stakedHeartsSlice = data0BinaryStr.slice(-111,-40);  
-        this.stakedHearts = binaryStrToBigDecimal(stakedHeartsSlice);  
-
-        let stakeSharesSlice = data0BinaryStr.slice(-183,-112);  
-        this.stakeShares = binaryStrToBigDecimal(stakeSharesSlice);
+        this.timestamp = data0.bitAnd(BigInt.fromI32(1).leftShift(40).minus(BigInt.fromI32(1)));
+        this.stakedHearts = data0.rightShift(40).bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
+        this.stakeShares = data0.rightShift(112).bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
 
         if(data0BinaryStr.length >= 184){ 
-            let payoutSlice = data0BinaryStr.slice(-255,-184);  
-            this.payout = binaryStrToBigDecimal(payoutSlice); 
+            this.payout = data0.rightShift(184).bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
         } 
-        else this.payout = BigDecimal.fromString("0");
-
+        else this.payout = BigInt.fromString("0");
+        
         if(data1BinaryStr != "0"){
-            let penaltySlice = data1BinaryStr.slice(-71);  
-            this.penalty = binaryStrToBigDecimal(penaltySlice);  
+            this.penalty = data1.bitAnd(BigInt.fromI32(1).leftShift(72).minus(BigInt.fromI32(1)));
         }
-        else this.penalty = BigDecimal.fromString("0");
+        else this.penalty = BigInt.fromString("0");
         
     }
 
-    getTimestamp(): BigDecimal {
+    getTimestamp(): BigInt {
         return this.timestamp;
     }
-    getStakedHearts(): BigDecimal {
+    getStakedHearts(): BigInt {
         return this.stakedHearts;
     }
-    getStakedShares(): BigDecimal {
+    getStakedShares(): BigInt {
         return this.stakeShares;
     }
-    getPayout(): BigDecimal {
+    getPayout(): BigInt {
         return this.payout;
     }
-    getPenalty(): BigDecimal {
+    getPenalty(): BigInt {
         return this.penalty;
     }
 }
@@ -249,24 +217,18 @@ export class ShareRateChangeData {
     uint40            shareRate       -->  data0 [ 79: 40]
     uint40   indexed  stakeId
 */
-    timestamp: BigDecimal;
-    shareRate: BigDecimal; 
+    timestamp: BigInt;
+    shareRate: BigInt; 
 
-    constructor(data0BinaryStr: string) {  
-        //log.debug('the data0BinaryStr: {}', [data0BinaryStr.toString()]);
-        //log.debug('the data1BinaryStr: {}', [data1BinaryStr.toString()]);
-        let timestampSlice = data0BinaryStr.slice(-39); 
-        this.timestamp = binaryStrToBigDecimal(timestampSlice);
-
-        let shareRateSlice = data0BinaryStr.slice(-79,-40);  
-        this.shareRate = binaryStrToBigDecimal(shareRateSlice);  
-
+    constructor(data0: BigInt) {   
+        this.timestamp = data0.bitAnd(BigInt.fromI32(1).leftShift(40).minus(BigInt.fromI32(1)));
+        this.shareRate = data0.rightShift(40).bitAnd(BigInt.fromI32(1).leftShift(40).minus(BigInt.fromI32(1)));
     }
 
-    getTimestamp(): BigDecimal {
+    getTimestamp(): BigInt {
         return this.timestamp;
     }
-    getShareRate(): BigDecimal {
+    getShareRate(): BigInt {
         return this.shareRate;
     }
 }

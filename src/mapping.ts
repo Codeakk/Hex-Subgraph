@@ -280,7 +280,7 @@ export function handleShareRateChange(event: ShareRateChange): void {
   let d0 = event.params.data0;  
   let _d0 = convertDecimalToBinary(d0);
   
-  let parsedData = new ShareRateChangeData(_d0);
+  let parsedData = new ShareRateChangeData(event.params.data0);
  
   _shareRateChange.timestamp = parsedData.getTimestamp();
   _shareRateChange.shareRate = parsedData.getShareRate(); 
@@ -292,12 +292,11 @@ export function handleShareRateChange(event: ShareRateChange): void {
   let hexHearts = BigDecimal.fromString("100000000");
   let tShare = BigDecimal.fromString("1000000000000"); 
 
-  let sharesPerHeart = shareRateDecimal / fiveBigDecimal;   
+  let sharesPerHeart = BigDecimal.fromString(shareRateDecimal.toString()).div(fiveBigDecimal);   
   let _sharesPerHeart = sharesPerHeart.toString();
 
-  let tShareRateHearts = tShare * BigDecimal.fromString(_sharesPerHeart);   
-  let tShareRateHex = tShareRateHearts / hexHearts;
-
+  let tShareRateHearts = tShare.times(BigDecimal.fromString(_sharesPerHeart));   
+  let tShareRateHex = tShareRateHearts.div(hexHearts);
 
   _shareRateChange.tShareRateHearts = tShareRateHearts; 
   _shareRateChange.tShareRateHex = tShareRateHex; 
@@ -325,7 +324,7 @@ export function handleStakeStart(event: StakeStart): void {
 
   let _d = convertDecimalToBinary(d);
 
-  let parsedData = new StakeStartData(_d);
+  let parsedData = new StakeStartData(event.params.data0, _d);
  
   _stakeStart.timestamp = parsedData.getTimestamp();
   _stakeStart.stakedHearts = parsedData.getStakedHearts();
@@ -335,22 +334,20 @@ export function handleStakeStart(event: StakeStart): void {
   
   let hexHearts = BigDecimal.fromString("100000000");
   let tShare = BigDecimal.fromString("1000000000000"); 
-  let sharesBigDecimal = parsedData.getStakedShares(); 
+  let sharesBigDecimal = BigDecimal.fromString(parsedData.getStakedShares().toString()); 
 
-  let tShares = sharesBigDecimal / tShare;
+  let tShares = sharesBigDecimal.div(tShare);
   
   _stakeStart.stakeTShares = tShares; 
 
   let hexContract = Contract.bind(Address.fromString("0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"));
   let currentDay = hexContract.currentDay();
-  let _currentDay = currentDay.toBigDecimal();
-  let startDay = _currentDay + BigDecimal.fromString("2");
+  let startDay = currentDay.plus(BigInt.fromString("2"));
 
   _stakeStart.startDay = startDay;
-  let endDay = startDay + parsedData.getStakedDays();
+  let endDay = startDay.plus(parsedData.getStakedDays());
   _stakeStart.endDay = endDay;
 
-  //log.debug('the _currentDay: {} , startDay: {} , endDay: {}', [currentDay.toString(),_currentDay.toString(),endDay.toString()]);
   let blockNumberBigDecimal = BigDecimal.fromString(event.block.number.toString());
   _stakeStart.blockNumber =  blockNumberBigDecimal;
    
@@ -382,7 +379,7 @@ export function handleStakeEnd(event: StakeEnd): void {
   let zero = BigInt.fromI32(0);
   if (d1 != zero) _d1 = convertDecimalToBinary(d1);
 
-  let parsedData = new StakeEndData(_d0,_d1);
+  let parsedData = new StakeEndData(event.params.data0, event.params.data1, _d0, _d1);
  
   _stakeEnd.timestamp = parsedData.getTimestamp();
   _stakeEnd.stakedHearts = parsedData.getStakedHearts();
@@ -395,25 +392,24 @@ export function handleStakeEnd(event: StakeEnd): void {
   let hexContract = Contract.bind(Address.fromString("0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"));
   
   let currentDay = hexContract.currentDay();
-  let _currentDay:BigDecimal = BigDecimal.fromString(currentDay.toString());
-  let one:BigDecimal = BigDecimal.fromString("1");
-  _currentDay = _currentDay + one;
+  let one: BigInt = BigInt.fromString("1");
+  currentDay = currentDay.plus(one);
   let startStakeId = event.params.stakeId.toHexString();
 
   let _stakeStart = _StakeStart.load(startStakeId)!;
-  let dueDay:BigDecimal = _stakeStart.stakedDays + _stakeStart.startDay;
-  let daysLate:BigDecimal = BigDecimal.fromString("0");
-  let daysEarly:BigDecimal = BigDecimal.fromString("0");
+  let dueDay: BigInt = _stakeStart.stakedDays.plus(_stakeStart.startDay);
+  let daysLate: BigInt = BigInt.fromString("0");
+  let daysEarly: BigInt = BigInt.fromString("0");
   
-  if(_currentDay > dueDay){
-    daysLate = _currentDay - dueDay;
+  if(currentDay > dueDay){
+    daysLate = currentDay.minus(dueDay);
   }
-  if(_currentDay < dueDay){
-    daysEarly = dueDay - _currentDay;
+  if(currentDay < dueDay){
+    daysEarly = dueDay.minus(currentDay);
   }
-  if(_currentDay == dueDay){
-    daysLate = BigDecimal.fromString("0");
-    daysEarly = BigDecimal.fromString("0");
+  if(currentDay == dueDay){
+    daysLate = BigInt.fromString("0");
+    daysEarly = BigInt.fromString("0");
   }
   _stakeEnd.daysLate = daysLate;
   _stakeEnd.daysEarly = daysEarly;
@@ -444,9 +440,6 @@ export function handleStakeGoodAccounting(event: StakeGoodAccounting): void {
 
   let d0 = event.params.data0; 
   let d1 = event.params.data1;
-  //log.debug('About to Convert To Binary: {}', [
-  //  d.toString()
-  //]);
   
   let _d0 = convertDecimalToBinary(d0);
 
@@ -454,7 +447,7 @@ export function handleStakeGoodAccounting(event: StakeGoodAccounting): void {
   let zero = BigInt.fromI32(0);
   if (d1 != zero) _d1 = convertDecimalToBinary(d1);
 
-  let parsedData = new StakeGoodAccountingData(_d0,_d1);
+  let parsedData = new StakeGoodAccountingData(event.params.data0, event.params.data1, _d0, _d1);
  
   _stakeGoodAccounting.timestamp = parsedData.getTimestamp();
   _stakeGoodAccounting.stakedHearts = parsedData.getStakedHearts();
@@ -462,7 +455,6 @@ export function handleStakeGoodAccounting(event: StakeGoodAccounting): void {
   _stakeGoodAccounting.payout = parsedData.getPayout();
   _stakeGoodAccounting.penalty = parsedData.getPenalty(); 
 
-  
   let startStakeId = event.params.stakeId.toHexString();
 
   let _stakeStart = _StakeStart.load(startStakeId)!;
