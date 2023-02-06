@@ -192,6 +192,40 @@ export class _StakeStart extends Entity {
   set transactionHash(value: Bytes) {
     this.set("transactionHash", Value.fromBytes(value));
   }
+
+  get cumulativeGasUsed(): BigInt | null {
+    let value = this.get("cumulativeGasUsed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set cumulativeGasUsed(value: BigInt | null) {
+    if (!value) {
+      this.unset("cumulativeGasUsed");
+    } else {
+      this.set("cumulativeGasUsed", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get gasUsed(): BigInt | null {
+    let value = this.get("gasUsed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set gasUsed(value: BigInt | null) {
+    if (!value) {
+      this.unset("gasUsed");
+    } else {
+      this.set("gasUsed", Value.fromBigInt(<BigInt>value));
+    }
+  }
 }
 
 export class _StakeEnd extends Entity {
@@ -359,6 +393,40 @@ export class _StakeEnd extends Entity {
   set transactionHash(value: Bytes) {
     this.set("transactionHash", Value.fromBytes(value));
   }
+
+  get cumulativeGasUsed(): BigInt | null {
+    let value = this.get("cumulativeGasUsed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set cumulativeGasUsed(value: BigInt | null) {
+    if (!value) {
+      this.unset("cumulativeGasUsed");
+    } else {
+      this.set("cumulativeGasUsed", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get gasUsed(): BigInt | null {
+    let value = this.get("gasUsed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set gasUsed(value: BigInt | null) {
+    if (!value) {
+      this.unset("gasUsed");
+    } else {
+      this.set("gasUsed", Value.fromBigInt(<BigInt>value));
+    }
+  }
 }
 
 export class _StakeGoodAccounting extends Entity {
@@ -491,6 +559,40 @@ export class _StakeGoodAccounting extends Entity {
 
   set transactionHash(value: Bytes) {
     this.set("transactionHash", Value.fromBytes(value));
+  }
+
+  get cumulativeGasUsed(): BigInt | null {
+    let value = this.get("cumulativeGasUsed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set cumulativeGasUsed(value: BigInt | null) {
+    if (!value) {
+      this.unset("cumulativeGasUsed");
+    } else {
+      this.set("cumulativeGasUsed", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get gasUsed(): BigInt | null {
+    let value = this.get("gasUsed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set gasUsed(value: BigInt | null) {
+    if (!value) {
+      this.unset("gasUsed");
+    } else {
+      this.set("gasUsed", Value.fromBigInt(<BigInt>value));
+    }
   }
 }
 

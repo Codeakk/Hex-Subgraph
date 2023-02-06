@@ -15,6 +15,8 @@ type _StakeStart @entity {
   stakeGoodAccounting:_StakeGoodAccounting
   blockNumber: BigDecimal!
   transactionHash:Bytes!
+  cumulativeGasUsed: BigInt
+  gasUsed: BigInt
 }
  
 type _StakeEnd @entity {
@@ -34,6 +36,8 @@ type _StakeEnd @entity {
   daysEarly:BigInt!
   blockNumber: BigDecimal!
   transactionHash:Bytes!
+  cumulativeGasUsed: BigInt
+  gasUsed: BigInt
 }
  
 type _StakeGoodAccounting @entity{
@@ -49,6 +53,8 @@ type _StakeGoodAccounting @entity{
   penalty:BigInt!
   blockNumber: BigDecimal!
   transactionHash:Bytes!
+  cumulativeGasUsed: BigInt
+  gasUsed: BigInt
 }
 
 type _ShareRateChange @entity{

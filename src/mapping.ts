@@ -320,6 +320,11 @@ export function handleStakeStart(event: StakeStart): void {
   _stakeStart.data0 = event.params.data0;
   _stakeStart.transactionHash = event.transaction.hash;
 
+  if(event.receipt){
+    _stakeStart.cumulativeGasUsed = event.receipt!.cumulativeGasUsed;
+    _stakeStart.gasUsed = event.receipt!.gasUsed;
+  }
+
   let d = (event.params.data0);  
 
   let _d = convertDecimalToBinary(d);
@@ -369,6 +374,11 @@ export function handleStakeEnd(event: StakeEnd): void {
   _stakeEnd.data0 = event.params.data0;
   _stakeEnd.data1 = event.params.data1; 
   _stakeEnd.transactionHash = event.transaction.hash;
+
+  if(event.receipt){
+    _stakeEnd.cumulativeGasUsed = event.receipt!.cumulativeGasUsed;
+    _stakeEnd.gasUsed = event.receipt!.gasUsed;
+  }
 
   let d0 = event.params.data0; 
   let d1 = event.params.data1; 
@@ -437,6 +447,11 @@ export function handleStakeGoodAccounting(event: StakeGoodAccounting): void {
   _stakeGoodAccounting.data0 = event.params.data0;
   _stakeGoodAccounting.data1 = event.params.data1;
   _stakeGoodAccounting.transactionHash = event.transaction.hash;
+
+  if(event.receipt){
+    _stakeGoodAccounting.cumulativeGasUsed = event.receipt!.cumulativeGasUsed;
+    _stakeGoodAccounting.gasUsed = event.receipt!.gasUsed;
+  }
 
   let d0 = event.params.data0; 
   let d1 = event.params.data1;

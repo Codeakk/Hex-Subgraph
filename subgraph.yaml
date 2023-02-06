@@ -11,7 +11,7 @@ dataSources:
       startBlock: 9041184  #9041184 
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Approval
@@ -41,10 +41,13 @@ dataSources:
           handler: handleShareRateChange
         - event: StakeEnd(uint256,uint256,indexed address,indexed uint40)
           handler: handleStakeEnd
+          receipt: true
         - event: StakeGoodAccounting(uint256,uint256,indexed address,indexed uint40,indexed address)
           handler: handleStakeGoodAccounting
+          receipt: true
         - event: StakeStart(uint256,indexed address,indexed uint40)
           handler: handleStakeStart 
+          receipt: true
         - event: XfLobbyEnter(uint256,indexed address,indexed uint256,indexed address)
           handler: handleXfLobbyEnter
         - event: XfLobbyExit(uint256,indexed address,indexed uint256,indexed address)
